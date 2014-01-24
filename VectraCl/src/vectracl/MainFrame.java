@@ -159,7 +159,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         drawPanel1Layout.setVerticalGroup(
             drawPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 571, Short.MAX_VALUE)
+            .addGap(0, 573, Short.MAX_VALUE)
         );
 
         jMenu1.setText("File");
