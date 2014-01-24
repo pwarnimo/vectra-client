@@ -7,6 +7,9 @@
 package vectracl;
 
 import drawing.Drawing;
+import drawing.Line;
+import drawing.Oval;
+import drawing.Rectangle;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
@@ -46,6 +49,9 @@ public class DrawPanel extends JPanel {
     }
     
     public class CustomListener extends MouseAdapter {
+        private int startX;
+        private int startY;
+        
         DrawPanel drawpanel;
         
         public CustomListener(DrawPanel drawpanel) {
@@ -54,19 +60,40 @@ public class DrawPanel extends JPanel {
         
         @Override
         public void mousePressed(MouseEvent e) {
+            startX = e.getX();
+            startY = e.getY();
+        }
+        
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            System.out.println("SX=>" + startX + " SY=>" + startY + " EX=>" + e.getX() + " EY=>" + e.getY());
+            
+            int width = e.getX() - startX;
+            int height = e.getY() - startY;
+            
+            System.out.println("W=>" + width + " H=>" + height);
+            
             switch (drawMode) {
                 case 0:
+                    Line ln0 = new Line(-1, startX, startY, e.getX(), e.getY(), Color.black, false);
+                    drw0.addShape(ln0);
                     
                     break;
-                    
+                 
                 case 1:
+                    Rectangle rect0 = new Rectangle(-1, startX, startY, width, height, Color.black, false);
+                    drw0.addShape(rect0);
                     
                     break;
                     
                 case 2:
+                    Oval oval0 = new Oval(-1, startX, startY, width, height, Color.black, false);
+                    drw0.addShape(oval0);
                     
                     break;
             }
+            
+            drawpanel.repaint();
         }
     }
 }
