@@ -1,7 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * VECTRA DRAWING PROGRAM -- CLIENT
+ * 
+ * This file (BaseShape.java) is part of the Vectra Drawing Client.
+ * This class defines all the properties of a shape which are used by the Line,
+ * Oval and Rectangle shapes.
  */
 
 package drawing;

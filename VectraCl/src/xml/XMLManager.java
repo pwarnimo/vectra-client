@@ -1,7 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * VECTRA DRAWING PROGRAM -- CLIENT
+ * 
+ * This file (XMLManager.java) is part of the Vectra Drawing Client.
+ * The XMLManager is used to create the XML code for the specific commands,
+ * which are send to the Vectra Drawing Server.
  */
 
 package xml;

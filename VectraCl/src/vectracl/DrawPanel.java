@@ -1,7 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * VECTRA DRAWING PROGRAM -- CLIENT
+ * 
+ * This file (DrawPanel.java) is part of the Vectra Drawing Client.
+ * The DrawPanel is used to draw, add, edit and display all the shapes which
+ * are fetched from the Vectra Drawing Server.
  */
 
 package vectracl;

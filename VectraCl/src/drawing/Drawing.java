@@ -1,7 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * VECTRA DRAWING PROGRAM -- CLIENT
+ * 
+ * This file (Drawing.java) is part of the Vectra Drawing Client.
+ * This class stores all the shapes which are fetched from the Vectra Drawing
+ * Server.
  */
 
 package drawing;
