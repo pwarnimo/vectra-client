@@ -11,6 +11,7 @@ package vectracl;
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -33,6 +34,8 @@ public class MainFrame extends javax.swing.JFrame {
         }
         
         initComponents();
+        
+        setIconImage(new ImageIcon(getClass().getResource("/resource/vectra.png")).getImage());
     }
 
     /**
@@ -149,6 +152,11 @@ public class MainFrame extends javax.swing.JFrame {
         jButton6.setFocusable(false);
         jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton6);
 
         javax.swing.GroupLayout drawPanel1Layout = new javax.swing.GroupLayout(drawPanel1);
@@ -218,6 +226,11 @@ public class MainFrame extends javax.swing.JFrame {
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         Color selectedColor = JColorChooser.showDialog(this, "Select background color...", Color.GREEN);
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        //AboutFrame frmAbout = new AboutFrame();
+        new AboutFrame().setVisible(true);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
