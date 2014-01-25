@@ -220,11 +220,13 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        Color selectedColor = JColorChooser.showDialog(this, "Select foreground color...", Color.GREEN);
+        Color selectedColor = JColorChooser.showDialog(this, "Select foreground color...", Color.BLUE);
+        drawPanel1.setCurrentForegroundColor(selectedColor);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        Color selectedColor = JColorChooser.showDialog(this, "Select background color...", Color.GREEN);
+        Color selectedColor = JColorChooser.showDialog(this, "Select background color...", Color.BLUE);
+        drawPanel1.setCurrentBackgroundColor(selectedColor);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed

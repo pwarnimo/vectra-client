@@ -25,6 +25,8 @@ import javax.swing.JPanel;
 public class DrawPanel extends JPanel {
     private int drawMode = 0;
     private Drawing drw0;
+    private Color CurrentForegroundColor;
+    private Color CurrentBackgroundColor;
     
     public DrawPanel() {
         super();
@@ -48,6 +50,22 @@ public class DrawPanel extends JPanel {
         
         g.drawString("VECTRA CLIENT 0.1", 2, 12);
         drw0.drawEverything(g);
+    }
+    
+    public void setCurrentForegroundColor(Color color) {
+        this.CurrentForegroundColor = color;
+    }
+    
+    public Color getCurrentForegroundColor() {
+        return CurrentForegroundColor;
+    }
+    
+    public void setCurrentBackgroundColor(Color color) {
+        this.CurrentBackgroundColor = color;
+    }
+    
+    public Color getCurrentBackgroundColor() {
+        return CurrentBackgroundColor;
     }
     
     public class CustomListener extends MouseAdapter {
@@ -77,19 +95,19 @@ public class DrawPanel extends JPanel {
             
             switch (drawMode) {
                 case 0:
-                    Line ln0 = new Line(-1, startX, startY, e.getX(), e.getY(), Color.black, false);
+                    Line ln0 = new Line(-1, startX, startY, e.getX(), e.getY(), drawpanel.getCurrentForegroundColor(), false);
                     drw0.addShape(ln0);
                     
                     break;
                  
                 case 1:
-                    Rectangle rect0 = new Rectangle(-1, startX, startY, width, height, Color.black, false);
+                    Rectangle rect0 = new Rectangle(-1, startX, startY, width, height, drawpanel.getCurrentForegroundColor(), false);
                     drw0.addShape(rect0);
                     
                     break;
                     
                 case 2:
-                    Oval oval0 = new Oval(-1, startX, startY, width, height, Color.black, false);
+                    Oval oval0 = new Oval(-1, startX, startY, width, height, drawpanel.getCurrentForegroundColor(), false);
                     drw0.addShape(oval0);
                     
                     break;
