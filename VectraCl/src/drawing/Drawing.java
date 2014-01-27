@@ -11,6 +11,7 @@ package drawing;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import xml.XMLManager;
 
 /**
  *
@@ -18,30 +19,43 @@ import java.util.ArrayList;
  */
 public class Drawing {
     private ArrayList<BaseShape> shapes = new ArrayList<>();
-    private String drawingName;
-    private String user;
+    private XMLManager xmlMgr;
     
     public Drawing() {
+        System.out.println("Drawing INIT...");
+        xmlMgr = new XMLManager();
         System.out.println("Drawing OK");
     }
     
     public void setDrawingName(String drawingName) {
-        this.drawingName = drawingName;
+        xmlMgr.setDrawing(drawingName);
     }
     
     public String getDrawingName() {
-        return drawingName;
+        return xmlMgr.getDrawing();
     }
     
     public void setUser(String user) {
-        this.user = user;
+        xmlMgr.setUser(user);
     }
     
     public String getUser() {
-        return user;
+        return xmlMgr.getUser();
+    }
+    
+    public void newDrawing(String drawingName, String user) {
+        xmlMgr.setDrawing(drawingName);
+        xmlMgr.setUser(user);
+        
+        shapes.clear();
+        
+        System.out.println("> Creating new drawing \"" + drawingName + "\"...");
+        xmlMgr.generateCreateDrawingXML();
     }
     
     public void addShape(BaseShape shape) {
+        System.out.println("> Adding shape to drawing \"" + xmlMgr.getDrawing() + "\"...");
+        xmlMgr.generateCreateShapeXML(shape);
         shapes.add(shape);
     }
     

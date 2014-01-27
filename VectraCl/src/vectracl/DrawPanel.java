@@ -28,10 +28,12 @@ public class DrawPanel extends JPanel {
     private Drawing drw0;
     private Color CurrentForegroundColor = Color.cyan;
     private Color CurrentBackgroundColor = Color.cyan;
-    private XMLManager mgrXML = new XMLManager("pwarnimo", "draw0");
+    //private XMLManager mgrXML = new XMLManager();
     
-    public DrawPanel() {
+    public DrawPanel() {       
         super();
+        
+        System.out.println("DrawPanel INIT...");
         
         drw0 = new Drawing();
         
@@ -40,6 +42,8 @@ public class DrawPanel extends JPanel {
         
         setBackground(Color.white);
         setForeground(Color.black);
+        
+        System.out.println("DrawPanel OK");
     }
     
     public void setDrawMode(int drawMode) {
@@ -86,6 +90,10 @@ public class DrawPanel extends JPanel {
         return drw0.getUser();
     }
     
+    public void newDrawing(String drawingName, String user) {
+        drw0.newDrawing(drawingName, user);
+    }
+    
     public class CustomListener extends MouseAdapter {
         private int startX;
         private int startY;
@@ -114,21 +122,21 @@ public class DrawPanel extends JPanel {
             switch (drawMode) {
                 case 0:
                     Line ln0 = new Line(-1, startX, startY, e.getX(), e.getY(), drawpanel.getCurrentForegroundColor(), false);
-                    mgrXML.generateCreateShapeXML(ln0);
+                    //mgrXML.generateCreateShapeXML(ln0);
                     drw0.addShape(ln0);
                     
                     break;
                  
                 case 1:
                     Rectangle rect0 = new Rectangle(-1, startX, startY, width, height, drawpanel.getCurrentForegroundColor(), false);
-                    mgrXML.generateCreateShapeXML(rect0);
+                    //mgrXML.generateCreateShapeXML(rect0);
                     drw0.addShape(rect0);
                     
                     break;
                     
                 case 2:
                     Oval oval0 = new Oval(-1, startX, startY, width, height, drawpanel.getCurrentForegroundColor(), false);
-                    mgrXML.generateCreateShapeXML(oval0);
+                    //mgrXML.generateCreateShapeXML(oval0);
                     drw0.addShape(oval0);
                     
                     break;

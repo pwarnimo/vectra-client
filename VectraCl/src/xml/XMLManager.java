@@ -34,9 +34,11 @@ public class XMLManager {
     private String drawing;
     private String user;
     
-    public XMLManager(String user, String drawing) {
-        this.user = user;
-        this.drawing = drawing;
+    public XMLManager() {
+        System.out.println("XMLManager INIT...");
+        
+        // INITIALIZATION...
+        
         System.out.println("XMLManager OK");
     }
     

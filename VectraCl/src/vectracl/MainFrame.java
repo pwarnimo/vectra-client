@@ -37,7 +37,7 @@ public class MainFrame extends javax.swing.JFrame {
         
         initComponents();
         
-        this.add(new JLabel("test"));
+        drawPanel1.newDrawing("drw0", "pwarnimo");
         
         setIconImage(new ImageIcon(getClass().getResource("/resource/vectra.png")).getImage());
     }
