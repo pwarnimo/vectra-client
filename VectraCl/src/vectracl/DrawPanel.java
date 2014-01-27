@@ -70,6 +70,22 @@ public class DrawPanel extends JPanel {
         return CurrentBackgroundColor;
     }
     
+    public void setDrawingName(String drawingName) {
+        drw0.setDrawingName(drawingName);
+    }
+    
+    public String getDrawingName() {
+        return drw0.getDrawingName();
+    }
+    
+    public void setUser(String user) {
+        drw0.setUser(user);
+    }
+    
+    public String getUser() {
+        return drw0.getUser();
+    }
+    
     public class CustomListener extends MouseAdapter {
         private int startX;
         private int startY;

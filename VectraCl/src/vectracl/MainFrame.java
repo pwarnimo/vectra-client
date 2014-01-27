@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -34,6 +36,8 @@ public class MainFrame extends javax.swing.JFrame {
         }
         
         initComponents();
+        
+        this.add(new JLabel("test"));
         
         setIconImage(new ImageIcon(getClass().getResource("/resource/vectra.png")).getImage());
     }
@@ -60,7 +64,6 @@ public class MainFrame extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jButton6 = new javax.swing.JButton();
-        drawPanel1 = new vectracl.DrawPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -172,21 +175,15 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jToolBar1.add(jButton6);
 
-        javax.swing.GroupLayout drawPanel1Layout = new javax.swing.GroupLayout(drawPanel1);
-        drawPanel1.setLayout(drawPanel1Layout);
-        drawPanel1Layout.setHorizontalGroup(
-            drawPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
-        );
-        drawPanel1Layout.setVerticalGroup(
-            drawPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 575, Short.MAX_VALUE)
-        );
-
         jMenu1.setText("File");
 
         jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/new.png"))); // NOI18N
         jMenuItem2.setText("New drawing");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
 
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/open.png"))); // NOI18N
@@ -237,14 +234,12 @@ public class MainFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
-            .addComponent(drawPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(drawPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(581, Short.MAX_VALUE))
         );
 
         pack();
@@ -256,12 +251,12 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         Color selectedColor = JColorChooser.showDialog(this, "Select foreground color...", Color.BLUE);
-        drawPanel1.setCurrentForegroundColor(selectedColor);
+        //drawPanel1.setCurrentForegroundColor(selectedColor);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         Color selectedColor = JColorChooser.showDialog(this, "Select background color...", Color.BLUE);
-        drawPanel1.setCurrentBackgroundColor(selectedColor);
+        //drawPanel1.setCurrentBackgroundColor(selectedColor);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -270,20 +265,25 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
-        drawPanel1.setDrawMode(1);
+        //drawPanel1.setDrawMode(1);
     }//GEN-LAST:event_jToggleButton2ActionPerformed
 
     private void jToggleButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
-        drawPanel1.setDrawMode(2);
+        //drawPanel1.setDrawMode(2);
     }//GEN-LAST:event_jToggleButton3ActionPerformed
 
     private void jToggleButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton4ActionPerformed
-        drawPanel1.setDrawMode(0);
+        //drawPanel1.setDrawMode(0);
     }//GEN-LAST:event_jToggleButton4ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        String drawing = (String)JOptionPane.showInputDialog(this, "Please enter a name for your new drawing.", "New drawing...", JOptionPane.PLAIN_MESSAGE, null, null, "");
+        
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -322,7 +322,6 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private vectracl.DrawPanel drawPanel1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton6;

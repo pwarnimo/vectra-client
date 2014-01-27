@@ -18,9 +18,27 @@ import java.util.ArrayList;
  */
 public class Drawing {
     private ArrayList<BaseShape> shapes = new ArrayList<>();
+    private String drawingName;
+    private String user;
     
     public Drawing() {
-        
+        System.out.println("Drawing OK");
+    }
+    
+    public void setDrawingName(String drawingName) {
+        this.drawingName = drawingName;
+    }
+    
+    public String getDrawingName() {
+        return drawingName;
+    }
+    
+    public void setUser(String user) {
+        this.user = user;
+    }
+    
+    public String getUser() {
+        return user;
     }
     
     public void addShape(BaseShape shape) {

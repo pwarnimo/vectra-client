@@ -56,6 +56,36 @@ public class XMLManager {
         return user;
     }
     
+    public void generateCreateDrawingXML() {
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            
+            Document doc = docBuilder.newDocument();
+            Element rootElement = doc.createElement("message");
+            
+            rootElement.setAttribute("drawing", drawing);
+            rootElement.setAttribute("user", user);
+            rootElement.setAttribute("cmd", "create");
+            
+            doc.appendChild(rootElement);
+            
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            
+            DOMSource source = new DOMSource(doc);
+            
+            StreamResult result =  new StreamResult(System.out);
+            transformer.transform(source, result);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void generateCreateShapeXML(BaseShape shape) {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
