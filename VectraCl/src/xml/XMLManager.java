@@ -107,7 +107,15 @@ public class XMLManager {
             element.setAttribute("y", String.valueOf(shape.getX()));
             element.setAttribute("width", String.valueOf(shape.getWidth()));
             element.setAttribute("height", String.valueOf(shape.getHeight()));
-            element.setAttribute("color", shape.getColor().toString());
+            //element.setAttribute("color", shape.getColor().toString());
+            
+            int r = shape.getColor().getRed();
+            int g = shape.getColor().getGreen();
+            int b = shape.getColor().getBlue();
+            
+            String hex = String.format("#%02x%02x%02x", r, g, b);
+            
+            element.setAttribute("color", hex);
             
             if (shape.getClass() == Line.class) {
                 element.setAttribute("type", String.valueOf(0));
@@ -119,7 +127,13 @@ public class XMLManager {
                 element.setAttribute("type", String.valueOf(2));
             }
             
-            element.setAttribute("filled", String.valueOf(shape.isFilled()));
+            if (shape.isFilled()) {
+                element.setAttribute("filled", String.valueOf(1));
+            }
+            else {
+                element.setAttribute("filled", String.valueOf(0));
+            }
+
             element.setAttribute("cmd", String.valueOf(1));
             
             rootElement.appendChild(element);

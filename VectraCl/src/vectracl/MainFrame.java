@@ -9,11 +9,11 @@
 package vectracl;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -40,6 +40,20 @@ public class MainFrame extends javax.swing.JFrame {
         drawPanel1.newDrawing("drw0", "pwarnimo");
         
         setIconImage(new ImageIcon(getClass().getResource("/resource/vectra.png")).getImage());
+        
+        File f = new File("settings.ini");
+        
+        if (f.exists()) {
+            System.out.println("> Loading settings from settings.ini...");
+            
+            System.out.println("> Initialized!");
+        }
+        else {
+            System.out.println("> No settings.ini! Starting from scratch...");
+            FirstStartDialog dlgStart = new FirstStartDialog();
+            dlgStart.setVisible(true);
+            System.out.println("> Initialized!");
+        }
     }
 
     /**
@@ -62,6 +76,7 @@ public class MainFrame extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        jToggleButton1 = new javax.swing.JToggleButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jButton6 = new javax.swing.JButton();
         drawPanel1 = new vectracl.DrawPanel();
@@ -87,6 +102,7 @@ public class MainFrame extends javax.swing.JFrame {
         jToolBar1.setRollover(true);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/new.png"))); // NOI18N
+        jButton1.setToolTipText("Create a new drawing on the server.");
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -95,9 +111,15 @@ public class MainFrame extends javax.swing.JFrame {
                 jButton1MouseClicked(evt);
             }
         });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton1);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/open.png"))); // NOI18N
+        jButton2.setToolTipText("Open a drawing from the server.");
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -107,6 +129,7 @@ public class MainFrame extends javax.swing.JFrame {
         buttonGroup1.add(jToggleButton4);
         jToggleButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/line.png"))); // NOI18N
         jToggleButton4.setSelected(true);
+        jToggleButton4.setToolTipText("Select a line for drawing.");
         jToggleButton4.setFocusable(false);
         jToggleButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jToggleButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -119,6 +142,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         buttonGroup1.add(jToggleButton2);
         jToggleButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/rectangle.png"))); // NOI18N
+        jToggleButton2.setToolTipText("Select a rectangle for drawing.");
         jToggleButton2.setFocusable(false);
         jToggleButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jToggleButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -131,6 +155,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         buttonGroup1.add(jToggleButton3);
         jToggleButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/oval.png"))); // NOI18N
+        jToggleButton3.setToolTipText("Select an oval for drawing.");
         jToggleButton3.setFocusable(false);
         jToggleButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jToggleButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -143,6 +168,7 @@ public class MainFrame extends javax.swing.JFrame {
         jToolBar1.add(jSeparator2);
 
         jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/color-f.png"))); // NOI18N
+        jButton7.setToolTipText("Set foreground color...");
         jButton7.setFocusable(false);
         jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -154,6 +180,7 @@ public class MainFrame extends javax.swing.JFrame {
         jToolBar1.add(jButton7);
 
         jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/color-b.png"))); // NOI18N
+        jButton8.setToolTipText("Set background color...");
         jButton8.setFocusable(false);
         jButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -163,9 +190,17 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(jButton8);
+
+        jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/fill.png"))); // NOI18N
+        jToggleButton1.setToolTipText("Fill shapes.");
+        jToggleButton1.setFocusable(false);
+        jToggleButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jToggleButton1);
         jToolBar1.add(jSeparator3);
 
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/help.png"))); // NOI18N
+        jButton6.setToolTipText("About this program...");
         jButton6.setFocusable(false);
         jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -299,6 +334,10 @@ public class MainFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        jMenuItem2.doClick();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -358,6 +397,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToggleButton jToggleButton3;
     private javax.swing.JToggleButton jToggleButton4;
