@@ -12,6 +12,7 @@ import drawing.BaseShape;
 import drawing.Line;
 import drawing.Oval;
 import drawing.Rectangle;
+import java.awt.Shape;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -88,6 +89,67 @@ public class XMLManager {
         }
     }
     
+    
+    public void genLoadDrawingXML() {
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            
+            Document doc = docBuilder.newDocument();
+            Element rootElement = doc.createElement("message");
+            
+            rootElement.setAttribute("drawing", drawing);
+            rootElement.setAttribute("user", user);
+            rootElement.setAttribute("cmd", "load");
+            
+            doc.appendChild(rootElement);
+            
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            
+            DOMSource source = new DOMSource(doc);
+            
+            StreamResult result =  new StreamResult(System.out);
+            transformer.transform(source, result);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void genDiffDrawingXML() {
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            
+            Document doc = docBuilder.newDocument();
+            Element rootElement = doc.createElement("message");
+            
+            rootElement.setAttribute("drawing", drawing);
+            rootElement.setAttribute("user", user);
+            rootElement.setAttribute("cmd", "load");
+            
+            doc.appendChild(rootElement);
+            
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            
+            DOMSource source = new DOMSource(doc);
+            
+            StreamResult result =  new StreamResult(System.out);
+            transformer.transform(source, result);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void generateCreateShapeXML(BaseShape shape) {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -98,7 +160,7 @@ public class XMLManager {
             
             rootElement.setAttribute("drawing", drawing);
             rootElement.setAttribute("user", user);
-            rootElement.setAttribute("cmd", "update");
+            rootElement.setAttribute("cmd", "diff");
             
             Element element = doc.createElement("element");
             
@@ -109,13 +171,16 @@ public class XMLManager {
             element.setAttribute("height", String.valueOf(shape.getHeight()));
             //element.setAttribute("color", shape.getColor().toString());
             
-            int r = shape.getColor().getRed();
+            /*int r = shape.getColor().getRed();
             int g = shape.getColor().getGreen();
             int b = shape.getColor().getBlue();
             
-            String hex = String.format("#%02x%02x%02x", r, g, b);
+            String hex = String.format("#%02x%02x%02x", r, g, b);*/
             
-            element.setAttribute("color", hex);
+            String rgb = Integer.toHexString(shape.getColor().getRGB());
+            rgb = "#" + rgb.substring(2, rgb.length());
+            
+            element.setAttribute("color", rgb);
             
             if (shape.getClass() == Line.class) {
                 element.setAttribute("type", String.valueOf(0));
@@ -154,5 +219,9 @@ public class XMLManager {
         } catch (TransformerException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public Shape xmlToShape(String xml) {
+        return null;
     }
 }

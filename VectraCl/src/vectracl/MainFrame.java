@@ -37,23 +37,24 @@ public class MainFrame extends javax.swing.JFrame {
         
         initComponents();
         
-        drawPanel1.newDrawing("drw0", "pwarnimo");
+        //drawPanel1.newDrawing("drw0", "pwarnimo");
         
         setIconImage(new ImageIcon(getClass().getResource("/resource/vectra.png")).getImage());
         
-        File f = new File("settings.ini");
+        //File f = new File("config.properties");
         
-        if (f.exists()) {
-            System.out.println("> Loading settings from settings.ini...");
+        /*if (f.exists()) {
+            System.out.println("> Loading settings from config.properties...");
             
             System.out.println("> Initialized!");
         }
         else {
-            System.out.println("> No settings.ini! Starting from scratch...");
+            System.out.println("> No config.properties found! Starting from scratch...");
             FirstStartDialog dlgStart = new FirstStartDialog();
             dlgStart.setVisible(true);
             System.out.println("> Initialized!");
-        }
+        }*/
+        System.out.println("> Property loading skipped!");
     }
 
     /**
@@ -219,7 +220,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         drawPanel1Layout.setVerticalGroup(
             drawPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 575, Short.MAX_VALUE)
+            .addGap(0, 577, Short.MAX_VALUE)
         );
 
         jMenu1.setText("File");
