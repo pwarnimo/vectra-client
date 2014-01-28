@@ -13,6 +13,7 @@ import drawing.Line;
 import drawing.Oval;
 import drawing.Rectangle;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -42,6 +43,8 @@ public class DrawPanel extends JPanel {
         
         setBackground(Color.white);
         setForeground(Color.black);
+        
+        setCursor(new Cursor(Cursor.TEXT_CURSOR));
         
         System.out.println("DrawPanel OK");
     }
