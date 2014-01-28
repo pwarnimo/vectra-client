@@ -41,9 +41,9 @@ public class MainFrame extends javax.swing.JFrame {
         
         setIconImage(new ImageIcon(getClass().getResource("/resource/vectra.png")).getImage());
         
-        //File f = new File("config.properties");
+        /*File f = new File("config.properties");
         
-        /*if (f.exists()) {
+        if (f.exists()) {
             System.out.println("> Loading settings from config.properties...");
             
             System.out.println("> Initialized!");
@@ -263,6 +263,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/settings.png"))); // NOI18N
         jMenuItem4.setText("Settings");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem4);
 
         jMenuBar1.add(jMenu2);
@@ -338,6 +343,11 @@ public class MainFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         jMenuItem2.doClick();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        SettingsDialog dlgSettings = new SettingsDialog();
+        dlgSettings.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -68,7 +68,7 @@ public class FirstStartDialog extends javax.swing.JFrame {
 
         jLabel4.setText("Welcome to the Vectra Drawing Client.");
 
-        jLabel5.setText("Please input your server and username and chose a drawing or create a new one.");
+        jLabel5.setText("Please input your server and username then chose a drawing or create a new one.");
 
         jTextField1.setText("http://vectra.warnimont.de/index.php");
 
@@ -87,6 +87,7 @@ public class FirstStartDialog extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/new.png"))); // NOI18N
         jButton4.setText("New drawing");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -136,11 +137,14 @@ public class FirstStartDialog extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ok.png"))); // NOI18N
         jButton1.setText("OK");
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/save.png"))); // NOI18N
         jButton2.setText("Apply");
 
-        jButton3.setText("Cancel");
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/cancel.png"))); // NOI18N
+        jButton3.setText("Discard");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -158,7 +162,7 @@ public class FirstStartDialog extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

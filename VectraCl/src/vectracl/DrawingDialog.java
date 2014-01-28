@@ -37,6 +37,7 @@ public class DrawingDialog extends javax.swing.JDialog {
 
         jLabel1.setText("Please enter a name for your new drawing.");
 
+        btnOk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ok.png"))); // NOI18N
         btnOk.setText("OK");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
