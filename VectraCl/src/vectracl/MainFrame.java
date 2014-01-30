@@ -10,6 +10,7 @@ package vectracl;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -17,6 +18,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import xml.XMLManager;
 
 /**
  *
@@ -39,9 +41,11 @@ public class MainFrame extends javax.swing.JFrame {
         
         //drawPanel1.newDrawing("drw0", "pwarnimo");
         
+        xmlMgr = new XMLManager();
+        
         setIconImage(new ImageIcon(getClass().getResource("/resource/vectra.png")).getImage());
         
-        /*File f = new File("config.properties");
+        File f = new File("config.properties");
         
         if (f.exists()) {
             System.out.println("> Loading settings from config.properties...");
@@ -53,8 +57,26 @@ public class MainFrame extends javax.swing.JFrame {
             FirstStartDialog dlgStart = new FirstStartDialog();
             dlgStart.setVisible(true);
             System.out.println("> Initialized!");
-        }*/
-        System.out.println("> Property loading skipped!");
+        }
+        
+        /*System.out.println("*** DEBUG OPTIONS ***");
+        
+        XMLManager xml = new XMLManager();
+        
+        xml.setUser("pwarnimo");
+        ArrayList<String> drawings = xml.getDrawings();
+        
+        for (int i = 0; i <= drawings.size() -1; i++) {
+            System.out.println("DrawingID->" + drawings.get(i));
+        }
+        
+        FirstStartDialog dlgStart = new FirstStartDialog();
+        
+        dlgStart.setList(drawings);
+        
+        dlgStart.setVisible(true);
+        
+        System.out.println("*** DEBUG OPTIONS ***");*/
     }
 
     /**
@@ -414,4 +436,5 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton4;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
+    public XMLManager xmlMgr;
 }

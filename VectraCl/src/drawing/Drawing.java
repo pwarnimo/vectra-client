@@ -44,13 +44,13 @@ public class Drawing {
     }
     
     public void newDrawing(String drawingName, String user) {
-        xmlMgr.setDrawing(drawingName);
+        //xmlMgr.setDrawing(drawingName);
         xmlMgr.setUser(user);
         
         shapes.clear();
         
         System.out.println("> Creating new drawing \"" + drawingName + "\"...");
-        xmlMgr.generateCreateDrawingXML();
+        xmlMgr.createDrawingXML(drawingName);
     }
     
     public void addShape(BaseShape shape) {
