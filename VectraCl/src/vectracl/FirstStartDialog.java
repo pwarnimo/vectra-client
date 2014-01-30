@@ -6,7 +6,14 @@
 
 package vectracl;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -72,7 +79,7 @@ public class FirstStartDialog extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 153, 153));
         jLabel1.setText("Vectra Drawing Program -- Client");
 
-        jLabel2.setText("Version 0.5");
+        jLabel2.setText("Version 0.9");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -237,7 +244,9 @@ public class FirstStartDialog extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please fill out all the fields!", "Warning!", JOptionPane.WARNING_MESSAGE);
         }
         else {
-            applySettings();
+            //applySettings();
+            xmlMgr.setUser(edtUsername.getText());
+            xmlMgr.setServerName(edtHostname.getText());
             
             setList(xmlMgr.getDrawings());
         }
@@ -265,6 +274,33 @@ public class FirstStartDialog extends javax.swing.JFrame {
     public void applySettings() {
         xmlMgr.setUser(edtUsername.getText());
         xmlMgr.setServerName(edtHostname.getText());
+        
+        Properties prop = new Properties();
+	OutputStream output = null;
+        try {
+            output = new FileOutputStream("config.properties");
+            
+            prop.setProperty("server", edtHostname.getText());
+            prop.setProperty("username", edtUsername.getText());
+            prop.setProperty("drawing", lstDrawings.getSelectedValue().toString());
+            prop.setProperty("rate", "5000");
+
+            // save properties to project root folder
+            prop.store(output, null);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FirstStartDialog.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FirstStartDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
     
     /**

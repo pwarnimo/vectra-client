@@ -55,7 +55,7 @@ public class Drawing {
     
     public void addShape(BaseShape shape) {
         System.out.println("> Adding shape to drawing \"" + xmlMgr.getDrawing() + "\"...");
-        xmlMgr.generateCreateShapeXML(shape);
+        System.out.println(xmlMgr.createShapeXML(shape));
         shapes.add(shape);
     }
     

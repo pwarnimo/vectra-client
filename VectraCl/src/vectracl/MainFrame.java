@@ -10,7 +10,12 @@ package vectracl;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -50,6 +55,30 @@ public class MainFrame extends javax.swing.JFrame {
         if (f.exists()) {
             System.out.println("> Loading settings from config.properties...");
             
+            Properties prop = new Properties();
+            InputStream input = null;
+            try {
+                input = new FileInputStream("config.properties");
+                
+                prop.load(input);
+                
+                System.out.println("INIT->PROP=SERVER->" + prop.getProperty("server"));
+		System.out.println("INIT->PROP=USERNAME->" + prop.getProperty("username"));
+		System.out.println("INIT->PROP=DRAWING->" + prop.getProperty("drawing"));
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            finally {
+                if (input != null) {
+                    try {
+                        input.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
             System.out.println("> Initialized!");
         }
         else {
@@ -118,7 +147,7 @@ public class MainFrame extends javax.swing.JFrame {
         jMenuItem7 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Vectra Client v0.1");
+        setTitle("Vectra Client v0.9");
         setBounds(new java.awt.Rectangle(50, 50, 800, 600));
 
         jToolBar1.setFloatable(false);
@@ -258,6 +287,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/open.png"))); // NOI18N
         jMenuItem3.setText("Open drawing");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem3);
         jMenu1.add(jSeparator4);
 
@@ -370,6 +404,11 @@ public class MainFrame extends javax.swing.JFrame {
         SettingsDialog dlgSettings = new SettingsDialog();
         dlgSettings.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        DialogOpen dlgOpen = new DialogOpen();
+        dlgOpen.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments

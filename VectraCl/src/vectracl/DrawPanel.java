@@ -29,7 +29,7 @@ public class DrawPanel extends JPanel {
     private Drawing drw0;
     private Color CurrentForegroundColor = Color.cyan;
     private Color CurrentBackgroundColor = Color.cyan;
-    //private XMLManager mgrXML = new XMLManager();
+    private XMLManager mgrXML = new XMLManager();
     
     public DrawPanel() {       
         super();
@@ -57,7 +57,7 @@ public class DrawPanel extends JPanel {
     public void paintComponent(Graphics g) { 
         super.paintComponent(g);
         
-        g.drawString("VECTRA CLIENT 0.1", 2, 12);
+        g.drawString("VECTRA CLIENT 0.9", 2, 12);
         drw0.drawEverything(g);
     }
     
@@ -125,7 +125,7 @@ public class DrawPanel extends JPanel {
             switch (drawMode) {
                 case 0:
                     Line ln0 = new Line(-1, startX, startY, e.getX(), e.getY(), drawpanel.getCurrentForegroundColor(), false);
-                    //mgrXML.generateCreateShapeXML(ln0);
+                    //mgrXML.generateCreateShapeXML(ln0);              
                     drw0.addShape(ln0);
                     
                     break;

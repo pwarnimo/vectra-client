@@ -260,7 +260,7 @@ public class XMLManager {
         }
     }
     
-    public void generateCreateShapeXML(BaseShape shape) {
+    public String createShapeXML(BaseShape shape) {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -270,7 +270,7 @@ public class XMLManager {
             
             rootElement.setAttribute("drawing", drawing);
             rootElement.setAttribute("user", user);
-            rootElement.setAttribute("cmd", "diff");
+            rootElement.setAttribute("cmd", "update");
             
             Element element = doc.createElement("element");
             
@@ -315,19 +315,73 @@ public class XMLManager {
             
             doc.appendChild(rootElement);
             
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
+            //TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            //Transformer transformer = transformerFactory.newTransformer();
+            
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            //transformer.setOutputProperty(OutputKeys.ENCODING, "US-ASCII");
+            StringWriter writer = new StringWriter();
+            transformer.transform(new DOMSource(doc), new StreamResult(writer));
+            String xml = writer.getBuffer().toString().replaceAll("\n|\r", "");
+            
+            //String xml = "";
             
             DOMSource source = new DOMSource(doc);
             
-            StreamResult result =  new StreamResult(System.out);
-            transformer.transform(source, result);
+            //StreamResult result =  new StreamResult(xml);
+            //transformer.transform(source, result);
+
+            String parameters = xml;
+             
+            System.out.println(">>REQ=" + xml);
+            
+            URL url;
+            HttpURLConnection connection = null;
+            
+            try {
+                url = new URL(servername);
+                
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "text/xml");
+                
+                connection.setRequestProperty("Content-Length", Integer.toString(parameters.getBytes().length));
+                connection.setRequestProperty("Content-Language", "en-US");
+
+                connection.setUseCaches(false);
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+                wr.writeBytes(parameters);
+                wr.flush();
+                wr.close();
+                
+                InputStream is = connection.getInputStream();
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+                String line;
+                StringBuffer response = new StringBuffer();
+                
+                return response.toString().trim();
+                //return response.toString().trim();
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            return null;
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         } catch (TransformerConfigurationException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         } catch (TransformerException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
     
