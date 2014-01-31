@@ -68,7 +68,7 @@ public class AboutFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Vectra Drawing Program");
 
-        jLabel3.setText("Client Version 0.9");
+        jLabel3.setText("Client Version 1.0");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 

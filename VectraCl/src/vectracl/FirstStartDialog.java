@@ -92,7 +92,7 @@ public class FirstStartDialog extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 153, 153));
         jLabel1.setText("Vectra Drawing Program -- Client");
 
-        jLabel2.setText("Version 0.9");
+        jLabel2.setText("Version 1.0");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 

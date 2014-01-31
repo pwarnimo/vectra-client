@@ -172,7 +172,7 @@ public class MainFrame extends javax.swing.JFrame {
         mmiAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Vectra Client v0.9");
+        setTitle("Vectra Client v1.0");
         setBounds(new java.awt.Rectangle(50, 50, 800, 600));
 
         jToolBar1.setFloatable(false);

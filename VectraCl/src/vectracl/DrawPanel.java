@@ -68,7 +68,7 @@ public class DrawPanel extends JPanel {
         
         //g.clearRect(0, 0, this.getWidth(), this.getHeight());
         //setForeground(Color.blue);
-        g.drawString("VECTRA CLIENT 0.9 - You are " + drw0.getUser() + " and you are drawing on " + drw0.getDrawingName(), 2, 12);
+        g.drawString("VECTRA CLIENT 1.0 - You are " + drw0.getUser() + " and you are drawing on " + drw0.getDrawingName(), 2, 12);
         drw0.drawEverything(g);
     }
     

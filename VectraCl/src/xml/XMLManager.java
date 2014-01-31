@@ -202,7 +202,14 @@ public class XMLManager {
                     Element eElement = (Element) nNode;
 
                     int type = Integer.valueOf(eElement.getAttribute("type"));
-                    Boolean filled = Boolean.valueOf(eElement.getAttribute("filled"));
+                    Boolean filled; // = Boolean.valueOf(eElement.getAttribute("filled"));
+                    
+                    if (eElement.getAttribute("filled").equals("1")) {
+                        filled = true;
+                    }
+                    else {
+                        filled = false;
+                    }
 
                     switch (type) {
                         case 0 :
@@ -297,7 +304,14 @@ public class XMLManager {
                     Element eElement = (Element) nNode;
 
                     int type = Integer.valueOf(eElement.getAttribute("type"));
-                    Boolean filled = Boolean.valueOf(eElement.getAttribute("filled"));
+                    Boolean filled; // = Boolean.valueOf(eElement.getAttribute("filled"));
+                    
+                    if (eElement.getAttribute("filled").equals("1")) {
+                        filled = true;
+                    }
+                    else {
+                        filled = false;
+                    }
 
                     switch (type) {
                         case 0 :
