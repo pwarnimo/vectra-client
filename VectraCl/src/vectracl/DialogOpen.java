@@ -103,6 +103,11 @@ public class DialogOpen extends javax.swing.JFrame {
 
         btnDiscard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/cancel.png"))); // NOI18N
         btnDiscard.setText("Discard");
+        btnDiscard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDiscardActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -174,6 +179,10 @@ public class DialogOpen extends javax.swing.JFrame {
         
         this.dispose();
     }//GEN-LAST:event_btnOpenActionPerformed
+
+    private void btnDiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscardActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnDiscardActionPerformed
 
     /**
      * @param args the command line arguments

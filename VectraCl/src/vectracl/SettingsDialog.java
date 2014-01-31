@@ -9,8 +9,10 @@ package vectracl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +29,8 @@ public class SettingsDialog extends javax.swing.JFrame {
     /**
      * Creates new form SettingsDialog
      */
+    private DrawPanel dpanel;
+    
     public SettingsDialog() {
         initComponents();
         
@@ -60,6 +64,10 @@ public class SettingsDialog extends javax.swing.JFrame {
                 }
             }
         }
+    }
+    
+    public void setDrawPanel(DrawPanel dpanel) {
+        this.dpanel = dpanel;
     }
 
     /**
@@ -219,12 +227,27 @@ public class SettingsDialog extends javax.swing.JFrame {
 
         btnOk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ok.png"))); // NOI18N
         btnOk.setText("OK");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
 
         btnApply.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/save.png"))); // NOI18N
         btnApply.setText("Apply");
+        btnApply.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnApplyActionPerformed(evt);
+            }
+        });
 
         btnDiscard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/cancel.png"))); // NOI18N
         btnDiscard.setText("Discard");
+        btnDiscard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDiscardActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -292,6 +315,56 @@ public class SettingsDialog extends javax.swing.JFrame {
             e.printStackTrace();
     	}
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApplyActionPerformed
+        dpanel.setUser(edtUsername.getText());
+        dpanel.setServer(edtHostname.getText());
+        
+        Properties prop = new Properties();
+        InputStream input = null;
+        OutputStream out = null;
+        try {
+            input = new FileInputStream("config.properties");
+
+            prop.load(input);
+
+            String drawing = prop.getProperty("drawing");
+            
+            prop.setProperty("server", edtHostname.getText());
+            prop.setProperty("username", edtUsername.getText());
+            prop.setProperty("drawing", drawing);
+            
+            out = new FileOutputStream("config.properties");
+            
+            prop.store(out, null);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            if (input != null) {
+                try {
+                    input.close();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        //dpanel.loadDrawing();
+        //dpanel.repaint();
+    }//GEN-LAST:event_btnApplyActionPerformed
+
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        btnApply.doClick();
+        this.dispose();
+    }//GEN-LAST:event_btnOkActionPerformed
+
+    private void btnDiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscardActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnDiscardActionPerformed
 
     /**
      * @param args the command line arguments

@@ -86,7 +86,7 @@ public class MainFrame extends javax.swing.JFrame {
                 pnlDraw.loadDrawing();
                 //drawPanel1.loadDiff();
                 
-                //tmDiff.start();
+                tmDiff.start();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -200,6 +200,11 @@ public class MainFrame extends javax.swing.JFrame {
         btnOpen.setFocusable(false);
         btnOpen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btnOpen);
         jToolBar1.add(jSeparator1);
 
@@ -362,6 +367,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         mmiAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/help.png"))); // NOI18N
         mmiAbout.setText("About...");
+        mmiAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mmiAboutActionPerformed(evt);
+            }
+        });
         mmiHelp.add(mmiAbout);
 
         mmMainMenu.add(mmiHelp);
@@ -465,6 +475,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void mmiSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mmiSettingsActionPerformed
         SettingsDialog dlgSettings = new SettingsDialog();
+        dlgSettings.setDrawPanel(pnlDraw);
         dlgSettings.setVisible(true);
     }//GEN-LAST:event_mmiSettingsActionPerformed
 
@@ -477,6 +488,14 @@ public class MainFrame extends javax.swing.JFrame {
     private void btnFilledActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilledActionPerformed
         pnlDraw.setFilled(!pnlDraw.getFilled());
     }//GEN-LAST:event_btnFilledActionPerformed
+
+    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+        mmiOpen.doClick();
+    }//GEN-LAST:event_btnOpenActionPerformed
+
+    private void mmiAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mmiAboutActionPerformed
+        btnAbout.doClick();
+    }//GEN-LAST:event_mmiAboutActionPerformed
     
     /**
      * @param args the command line arguments
