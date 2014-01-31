@@ -93,6 +93,14 @@ public class DrawPanel extends JPanel {
         return drw0.getUser();
     }
     
+    public void loadDrawing() {
+        drw0.loadDrawing();
+    }
+    
+    public void loadDiff() {
+        drw0.loadDiff();
+    }
+    
     public void newDrawing(String drawingName, String user) {
         drw0.newDrawing(drawingName, user);
     }

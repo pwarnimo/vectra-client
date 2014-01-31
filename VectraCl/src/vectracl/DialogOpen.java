@@ -29,6 +29,7 @@ public class DialogOpen extends javax.swing.JFrame {
         
         XMLManager mgrXML = new XMLManager();
         mgrXML.setUser("pwarnimo");
+        mgrXML.setServerName("http://vectra.local/index.php");
         
         lstDrawings.setListData(mgrXML.getDrawings().toArray());
     }

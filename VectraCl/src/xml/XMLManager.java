@@ -12,6 +12,7 @@ import drawing.BaseShape;
 import drawing.Line;
 import drawing.Oval;
 import drawing.Rectangle;
+import java.awt.Color;
 import java.awt.Shape;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -200,7 +201,7 @@ public class XMLManager {
     }
     
     
-    public void genLoadDrawingXML() {
+    public ArrayList<BaseShape> loadDrawingXML() {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -214,23 +215,152 @@ public class XMLManager {
             
             doc.appendChild(rootElement);
             
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
+            //TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            //Transformer transformer = transformerFactory.newTransformer();
+            
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            //transformer.setOutputProperty(OutputKeys.ENCODING, "US-ASCII");
+            StringWriter writer = new StringWriter();
+            transformer.transform(new DOMSource(doc), new StreamResult(writer));
+            String xml = writer.getBuffer().toString().replaceAll("\n|\r", "");
+            
+            //String xml = "";
             
             DOMSource source = new DOMSource(doc);
             
-            StreamResult result =  new StreamResult(System.out);
-            transformer.transform(source, result);
+            //StreamResult result =  new StreamResult(xml);
+            //transformer.transform(source, result);
+
+            String parameters = xml;
+             
+            System.out.println(">>REQ=" + xml);
+            
+            URL url;
+            HttpURLConnection connection = null;
+            
+            try {
+                url = new URL(servername);
+                
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "text/xml");
+                
+                connection.setRequestProperty("Content-Length", Integer.toString(parameters.getBytes().length));
+                connection.setRequestProperty("Content-Language", "en-US");
+
+                connection.setUseCaches(false);
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+                wr.writeBytes(parameters);
+                wr.flush();
+                wr.close();
+                
+                InputStream is = connection.getInputStream();
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+                String line;
+                StringBuffer response = new StringBuffer();
+                while ((line = rd.readLine()) != null) {
+                    response.append(line);
+                    response.append('\r');
+                }
+                rd.close();
+                
+                System.out.println(response.toString().trim());
+                
+                InputSource is2;
+                is2 = new InputSource(new StringReader(response.toString().trim()));
+                
+                //System.out.println(response.toString().trim());
+                
+                doc = docBuilder.parse(is2);
+                //doc.getDocumentElement().normalize();
+                
+                NodeList nList = doc.getElementsByTagName("element");
+                
+                ArrayList<BaseShape> tmp = new ArrayList<>();
+                
+                for (int temp = 0; temp < nList.getLength(); temp++) {
+                    Node nNode = nList.item(temp);
+                    
+                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element eElement = (Element) nNode;
+ 
+                        int type = Integer.valueOf(eElement.getAttribute("type"));
+                        Boolean filled = Boolean.valueOf(eElement.getAttribute("filled"));
+                        
+                        switch (type) {
+                            case 0 :
+                                System.out.println("Creating line...");
+                                Line ln0 = new Line(Integer.valueOf(eElement.getAttribute("id")), 
+                                        Integer.valueOf(eElement.getAttribute("x")), 
+                                        Integer.valueOf(eElement.getAttribute("y")),
+                                        Integer.valueOf(eElement.getAttribute("width")), 
+                                        Integer.valueOf(eElement.getAttribute("height")), 
+                                        Color.decode(eElement.getAttribute("color")), 
+                                        filled);
+                                
+                                tmp.add(ln0);
+                                
+                                break;
+                                
+                            case 1 : 
+                                System.out.println("Creating rectangle...");
+                                Rectangle rect0 = new Rectangle(Integer.valueOf(eElement.getAttribute("id")), 
+                                        Integer.valueOf(eElement.getAttribute("x")), 
+                                        Integer.valueOf(eElement.getAttribute("y")),
+                                        Integer.valueOf(eElement.getAttribute("width")), 
+                                        Integer.valueOf(eElement.getAttribute("height")), 
+                                        Color.decode(eElement.getAttribute("color")), 
+                                        filled);
+                                
+                                tmp.add(rect0);
+                                
+                                break;
+                                
+                            case 2 :
+                                System.out.println("Creating oval...");
+                                Oval oval0 = new Oval(Integer.valueOf(eElement.getAttribute("id")), 
+                                        Integer.valueOf(eElement.getAttribute("x")), 
+                                        Integer.valueOf(eElement.getAttribute("y")),
+                                        Integer.valueOf(eElement.getAttribute("width")), 
+                                        Integer.valueOf(eElement.getAttribute("height")), 
+                                        Color.decode(eElement.getAttribute("color")), 
+                                        filled);
+                                
+                                tmp.add(oval0);
+                                
+                                break;
+                        }
+                    }
+                }
+                
+                return tmp;
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SAXException ex) {
+                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            return null;
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         } catch (TransformerConfigurationException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         } catch (TransformerException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
     
-    public void genDiffDrawingXML() {
+    public ArrayList<BaseShape> diffDrawingXML() {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -240,23 +370,83 @@ public class XMLManager {
             
             rootElement.setAttribute("drawing", drawing);
             rootElement.setAttribute("user", user);
-            rootElement.setAttribute("cmd", "load");
+            rootElement.setAttribute("cmd", "diff");
             
             doc.appendChild(rootElement);
             
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
+            //TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            //Transformer transformer = transformerFactory.newTransformer();
+            
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            //transformer.setOutputProperty(OutputKeys.ENCODING, "US-ASCII");
+            StringWriter writer = new StringWriter();
+            transformer.transform(new DOMSource(doc), new StreamResult(writer));
+            String xml = writer.getBuffer().toString().replaceAll("\n|\r", "");
+            
+            //String xml = "";
             
             DOMSource source = new DOMSource(doc);
             
-            StreamResult result =  new StreamResult(System.out);
-            transformer.transform(source, result);
+            //StreamResult result =  new StreamResult(xml);
+            //transformer.transform(source, result);
+
+            String parameters = xml;
+             
+            System.out.println(">>REQ=" + xml);
+            
+            URL url;
+            HttpURLConnection connection = null;
+            
+            try {
+                url = new URL(servername);
+                
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "text/xml");
+                
+                connection.setRequestProperty("Content-Length", Integer.toString(parameters.getBytes().length));
+                connection.setRequestProperty("Content-Language", "en-US");
+
+                connection.setUseCaches(false);
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+                wr.writeBytes(parameters);
+                wr.flush();
+                wr.close();
+                
+                InputStream is = connection.getInputStream();
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+                String line;
+                StringBuffer response = new StringBuffer();
+                while ((line = rd.readLine()) != null) {
+                    response.append(line);
+                    response.append('\r');
+                }
+                rd.close();
+
+                System.out.println(response.toString().trim());
+                
+                return null;
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            return null;
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         } catch (TransformerConfigurationException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         } catch (TransformerException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
     
@@ -276,7 +466,7 @@ public class XMLManager {
             
             element.setAttribute("id", String.valueOf(-1));
             element.setAttribute("x", String.valueOf(shape.getX()));
-            element.setAttribute("y", String.valueOf(shape.getX()));
+            element.setAttribute("y", String.valueOf(shape.getY()));
             element.setAttribute("width", String.valueOf(shape.getWidth()));
             element.setAttribute("height", String.valueOf(shape.getHeight()));
             //element.setAttribute("color", shape.getColor().toString());
@@ -293,23 +483,23 @@ public class XMLManager {
             element.setAttribute("color", rgb);
             
             if (shape.getClass() == Line.class) {
-                element.setAttribute("type", String.valueOf(0));
+                element.setAttribute("type", "1");
             }
             else if (shape.getClass() == Rectangle.class) {
-                element.setAttribute("type", String.valueOf(1));
+                element.setAttribute("type", "2");
             }
             else if (shape.getClass() == Oval.class) {
-                element.setAttribute("type", String.valueOf(2));
+                element.setAttribute("type", "3");
             }
             
             if (shape.isFilled()) {
-                element.setAttribute("filled", String.valueOf(1));
+                element.setAttribute("filled", "1");
             }
             else {
-                element.setAttribute("filled", String.valueOf(0));
+                element.setAttribute("filled", "0");
             }
 
-            element.setAttribute("cmd", String.valueOf(1));
+            element.setAttribute("cmd", "1");
             
             rootElement.appendChild(element);
             
@@ -363,9 +553,13 @@ public class XMLManager {
                 BufferedReader rd = new BufferedReader(new InputStreamReader(is));
                 String line;
                 StringBuffer response = new StringBuffer();
-                
+                while ((line = rd.readLine()) != null) {
+                    response.append(line);
+                    response.append('\r');
+                }
+                rd.close();
+
                 return response.toString().trim();
-                //return response.toString().trim();
             } catch (MalformedURLException ex) {
                 Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {

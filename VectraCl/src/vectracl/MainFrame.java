@@ -65,6 +65,11 @@ public class MainFrame extends javax.swing.JFrame {
                 System.out.println("INIT->PROP=SERVER->" + prop.getProperty("server"));
 		System.out.println("INIT->PROP=USERNAME->" + prop.getProperty("username"));
 		System.out.println("INIT->PROP=DRAWING->" + prop.getProperty("drawing"));
+                
+                drawPanel1.setUser(prop.getProperty("username"));
+                drawPanel1.setDrawingName(prop.getProperty("drawing"));
+                //drawPanel1.loadDrawing();
+                drawPanel1.loadDiff();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {

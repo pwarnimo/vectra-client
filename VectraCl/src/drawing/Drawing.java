@@ -24,6 +24,9 @@ public class Drawing {
     public Drawing() {
         System.out.println("Drawing INIT...");
         xmlMgr = new XMLManager();
+        xmlMgr.setServerName("http://vectra.local/index.php");
+        xmlMgr.setUser("pwarnimo");
+        xmlMgr.setDrawing("CassieHicks");
         System.out.println("Drawing OK");
     }
     
@@ -57,6 +60,16 @@ public class Drawing {
         System.out.println("> Adding shape to drawing \"" + xmlMgr.getDrawing() + "\"...");
         System.out.println(xmlMgr.createShapeXML(shape));
         shapes.add(shape);
+    }
+    
+    public void loadDiff() {
+        ArrayList<BaseShape> tmpShapes = xmlMgr.diffDrawingXML();
+    }
+    
+    public void loadDrawing() {
+        ArrayList<BaseShape> tmpShapes = xmlMgr.loadDrawingXML();
+        
+        this.shapes = tmpShapes;
     }
     
     public BaseShape getShape(int id) {
