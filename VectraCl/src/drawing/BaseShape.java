@@ -16,13 +16,13 @@ import java.awt.Graphics;
  * @author pwarnimo
  */
 public class BaseShape {
-    private int id;
-    private int x;
-    private int y;
-    private int width;
-    private int height;
-    private Color color;
-    private boolean filled;
+    protected int id;
+    protected int x;
+    protected int y;
+    protected int width;
+    protected int height;
+    protected Color color;
+    protected boolean filled;
     
     public BaseShape(int id, int x, int y, int width, int height, Color color, boolean filled) {
         this.id = id;
@@ -92,5 +92,6 @@ public class BaseShape {
     
     public void drawShape(Graphics g) {
         g.setColor(color);
+        
     }
 }

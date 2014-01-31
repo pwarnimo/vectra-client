@@ -62,8 +62,13 @@ public class Drawing {
         shapes.add(shape);
     }
     
-    public void loadDiff() {
-        ArrayList<BaseShape> tmpShapes = xmlMgr.diffDrawingXML();
+    public void loadDiff() { 
+        //ArrayList<BaseShape> tmpShapes = xmlMgr.diffDrawingXML();
+        
+        System.out.println("TIMER->Loading Diff...");
+        //this.shapes = tmpShapes;
+        xmlMgr.diffDrawingXML(shapes);
+        System.out.println("TIMER->DONE!");
     }
     
     public void loadDrawing() {

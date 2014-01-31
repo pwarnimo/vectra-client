@@ -21,6 +21,8 @@ public class Oval extends BaseShape {
     
     @Override
     public void drawShape(Graphics g) {
+        g.setColor(color);
+        
         if (isFilled()) {
             g.fillOval(getX(), getY(), getWidth(), getHeight());
         }

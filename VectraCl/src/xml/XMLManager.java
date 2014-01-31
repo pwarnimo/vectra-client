@@ -360,7 +360,7 @@ public class XMLManager {
         }
     }
     
-    public ArrayList<BaseShape> diffDrawingXML() {
+    public ArrayList<BaseShape> diffDrawingXML(ArrayList<BaseShape> tmp) {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -428,12 +428,83 @@ public class XMLManager {
                 }
                 rd.close();
 
+                //System.out.println(response.toString().trim());
+                
                 System.out.println(response.toString().trim());
                 
-                return null;
+                InputSource is2;
+                is2 = new InputSource(new StringReader(response.toString().trim()));
+                
+                //System.out.println(response.toString().trim());
+                
+                doc = docBuilder.parse(is2);
+                //doc.getDocumentElement().normalize();
+                
+                NodeList nList = doc.getElementsByTagName("element");
+                
+                //ArrayList<BaseShape> tmp = new ArrayList<>();
+                
+                for (int temp = 0; temp < nList.getLength(); temp++) {
+                    Node nNode = nList.item(temp);
+                    
+                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element eElement = (Element) nNode;
+ 
+                        int type = Integer.valueOf(eElement.getAttribute("type"));
+                        Boolean filled = Boolean.valueOf(eElement.getAttribute("filled"));
+                        
+                        switch (type) {
+                            case 0 :
+                                System.out.println("Creating line...");
+                                Line ln0 = new Line(Integer.valueOf(eElement.getAttribute("id")), 
+                                        Integer.valueOf(eElement.getAttribute("x")), 
+                                        Integer.valueOf(eElement.getAttribute("y")),
+                                        Integer.valueOf(eElement.getAttribute("width")), 
+                                        Integer.valueOf(eElement.getAttribute("height")), 
+                                        Color.decode(eElement.getAttribute("color")), 
+                                        filled);
+                                
+                                tmp.add(ln0);
+                                
+                                break;
+                                
+                            case 1 : 
+                                System.out.println("Creating rectangle...");
+                                Rectangle rect0 = new Rectangle(Integer.valueOf(eElement.getAttribute("id")), 
+                                        Integer.valueOf(eElement.getAttribute("x")), 
+                                        Integer.valueOf(eElement.getAttribute("y")),
+                                        Integer.valueOf(eElement.getAttribute("width")), 
+                                        Integer.valueOf(eElement.getAttribute("height")), 
+                                        Color.decode(eElement.getAttribute("color")), 
+                                        filled);
+                                
+                                tmp.add(rect0);
+                                
+                                break;
+                                
+                            case 2 :
+                                System.out.println("Creating oval...");
+                                Oval oval0 = new Oval(Integer.valueOf(eElement.getAttribute("id")), 
+                                        Integer.valueOf(eElement.getAttribute("x")), 
+                                        Integer.valueOf(eElement.getAttribute("y")),
+                                        Integer.valueOf(eElement.getAttribute("width")), 
+                                        Integer.valueOf(eElement.getAttribute("height")), 
+                                        Color.decode(eElement.getAttribute("color")), 
+                                        filled);
+                                
+                                tmp.add(oval0);
+                                
+                                break;
+                        }
+                    }
+                }
+                
+                return tmp;
             } catch (MalformedURLException ex) {
                 Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
+                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SAXException ex) {
                 Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
             }
             

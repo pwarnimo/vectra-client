@@ -21,6 +21,8 @@ public class Rectangle extends BaseShape {
     
     @Override
     public void drawShape(Graphics g) {
+        g.setColor(color);
+        
         if (isFilled()) {
             g.fillRect(getX(), getY(), getWidth(), getHeight());
         }

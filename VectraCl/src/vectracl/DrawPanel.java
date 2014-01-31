@@ -15,8 +15,12 @@ import drawing.Rectangle;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URL;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import xml.XMLManager;
 
@@ -30,6 +34,7 @@ public class DrawPanel extends JPanel {
     private Color CurrentForegroundColor = Color.cyan;
     private Color CurrentBackgroundColor = Color.cyan;
     private XMLManager mgrXML = new XMLManager();
+    boolean filled = false;
     
     public DrawPanel() {       
         super();
@@ -44,7 +49,10 @@ public class DrawPanel extends JPanel {
         setBackground(Color.white);
         setForeground(Color.black);
         
-        setCursor(new Cursor(Cursor.TEXT_CURSOR));
+        //setCursor(new Cursor(Cursor.TEXT_CURSOR));
+        /*Toolkit toolkit = Toolkit.getDefaultToolkit();
+        URL img = this.getClass().getResource("resource/pen.png");
+        ImageIcon image = new ImageIcon(img);*/
         
         System.out.println("DrawPanel OK");
     }
@@ -57,7 +65,8 @@ public class DrawPanel extends JPanel {
     public void paintComponent(Graphics g) { 
         super.paintComponent(g);
         
-        g.drawString("VECTRA CLIENT 0.9", 2, 12);
+        //setForeground(Color.blue);
+        g.drawString("VECTRA CLIENT 0.9 - You are " + drw0.getUser(), 2, 12);
         drw0.drawEverything(g);
     }
     
@@ -99,10 +108,19 @@ public class DrawPanel extends JPanel {
     
     public void loadDiff() {
         drw0.loadDiff();
+        this.repaint();
     }
     
     public void newDrawing(String drawingName, String user) {
         drw0.newDrawing(drawingName, user);
+    }
+    
+    public void setFilled(boolean filled) {
+        this.filled = filled;
+    }
+    
+    public boolean getFilled() {
+        return filled;
     }
     
     public class CustomListener extends MouseAdapter {
@@ -132,22 +150,19 @@ public class DrawPanel extends JPanel {
             
             switch (drawMode) {
                 case 0:
-                    Line ln0 = new Line(-1, startX, startY, e.getX(), e.getY(), drawpanel.getCurrentForegroundColor(), false);
-                    //mgrXML.generateCreateShapeXML(ln0);              
+                    Line ln0 = new Line(-1, startX, startY, e.getX(), e.getY(), drawpanel.getCurrentForegroundColor(), filled);           
                     drw0.addShape(ln0);
                     
                     break;
                  
                 case 1:
-                    Rectangle rect0 = new Rectangle(-1, startX, startY, width, height, drawpanel.getCurrentForegroundColor(), false);
-                    //mgrXML.generateCreateShapeXML(rect0);
+                    Rectangle rect0 = new Rectangle(-1, startX, startY, width, height, drawpanel.getCurrentForegroundColor(), filled);
                     drw0.addShape(rect0);
                     
                     break;
                     
                 case 2:
-                    Oval oval0 = new Oval(-1, startX, startY, width, height, drawpanel.getCurrentForegroundColor(), false);
-                    //mgrXML.generateCreateShapeXML(oval0);
+                    Oval oval0 = new Oval(-1, startX, startY, width, height, drawpanel.getCurrentForegroundColor(), filled);
                     drw0.addShape(oval0);
                     
                     break;

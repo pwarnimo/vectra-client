@@ -9,6 +9,8 @@
 package vectracl;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import xml.XMLManager;
@@ -66,10 +69,10 @@ public class MainFrame extends javax.swing.JFrame {
 		System.out.println("INIT->PROP=USERNAME->" + prop.getProperty("username"));
 		System.out.println("INIT->PROP=DRAWING->" + prop.getProperty("drawing"));
                 
-                drawPanel1.setUser(prop.getProperty("username"));
-                drawPanel1.setDrawingName(prop.getProperty("drawing"));
-                //drawPanel1.loadDrawing();
-                drawPanel1.loadDiff();
+                pnlDraw.setUser(prop.getProperty("username"));
+                pnlDraw.setDrawingName(prop.getProperty("drawing"));
+                pnlDraw.loadDrawing();
+                //drawPanel1.loadDiff();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -111,6 +114,16 @@ public class MainFrame extends javax.swing.JFrame {
         dlgStart.setVisible(true);
         
         System.out.println("*** DEBUG OPTIONS ***");*/
+            
+        ActionListener diffUpdate = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pnlDraw.loadDiff();
+            }
+        };
+        
+        Timer tmDiff = new Timer(1000, diffUpdate);
+        tmDiff.start();
     }
 
     /**
@@ -124,32 +137,32 @@ public class MainFrame extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnNew = new javax.swing.JButton();
+        btnOpen = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
-        jToggleButton4 = new javax.swing.JToggleButton();
-        jToggleButton2 = new javax.swing.JToggleButton();
-        jToggleButton3 = new javax.swing.JToggleButton();
+        btnLine = new javax.swing.JToggleButton();
+        btnRectangle = new javax.swing.JToggleButton();
+        btnOval = new javax.swing.JToggleButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        btnFGColor = new javax.swing.JButton();
+        btnBGColor = new javax.swing.JButton();
+        btnFilled = new javax.swing.JToggleButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
-        jButton6 = new javax.swing.JButton();
-        drawPanel1 = new vectracl.DrawPanel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        btnAbout = new javax.swing.JButton();
+        pnlDraw = new vectracl.DrawPanel();
+        mmMainMenu = new javax.swing.JMenuBar();
+        mmiFile = new javax.swing.JMenu();
+        mmiNew = new javax.swing.JMenuItem();
+        mmiOpen = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        mmiQuit = new javax.swing.JMenuItem();
+        mmiEdit = new javax.swing.JMenu();
+        mmiFGColor = new javax.swing.JMenuItem();
+        mmiBGColor = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem7 = new javax.swing.JMenuItem();
+        mmiSettings = new javax.swing.JMenuItem();
+        mmiHelp = new javax.swing.JMenu();
+        mmiAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Vectra Client v0.9");
@@ -158,263 +171,272 @@ public class MainFrame extends javax.swing.JFrame {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/new.png"))); // NOI18N
-        jButton1.setToolTipText("Create a new drawing on the server.");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/new.png"))); // NOI18N
+        btnNew.setToolTipText("Create a new drawing on the server.");
+        btnNew.setFocusable(false);
+        btnNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNew.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                btnNewMouseClicked(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnNewActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton1);
+        jToolBar1.add(btnNew);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/open.png"))); // NOI18N
-        jButton2.setToolTipText("Open a drawing from the server.");
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
+        btnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/open.png"))); // NOI18N
+        btnOpen.setToolTipText("Open a drawing from the server.");
+        btnOpen.setFocusable(false);
+        btnOpen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnOpen);
         jToolBar1.add(jSeparator1);
 
-        buttonGroup1.add(jToggleButton4);
-        jToggleButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/line.png"))); // NOI18N
-        jToggleButton4.setSelected(true);
-        jToggleButton4.setToolTipText("Select a line for drawing.");
-        jToggleButton4.setFocusable(false);
-        jToggleButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jToggleButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToggleButton4.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(btnLine);
+        btnLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/line.png"))); // NOI18N
+        btnLine.setSelected(true);
+        btnLine.setToolTipText("Select a line for drawing.");
+        btnLine.setFocusable(false);
+        btnLine.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnLine.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnLine.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton4ActionPerformed(evt);
+                btnLineActionPerformed(evt);
             }
         });
-        jToolBar1.add(jToggleButton4);
+        jToolBar1.add(btnLine);
 
-        buttonGroup1.add(jToggleButton2);
-        jToggleButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/rectangle.png"))); // NOI18N
-        jToggleButton2.setToolTipText("Select a rectangle for drawing.");
-        jToggleButton2.setFocusable(false);
-        jToggleButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jToggleButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(btnRectangle);
+        btnRectangle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/rectangle.png"))); // NOI18N
+        btnRectangle.setToolTipText("Select a rectangle for drawing.");
+        btnRectangle.setFocusable(false);
+        btnRectangle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRectangle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRectangle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton2ActionPerformed(evt);
+                btnRectangleActionPerformed(evt);
             }
         });
-        jToolBar1.add(jToggleButton2);
+        jToolBar1.add(btnRectangle);
 
-        buttonGroup1.add(jToggleButton3);
-        jToggleButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/oval.png"))); // NOI18N
-        jToggleButton3.setToolTipText("Select an oval for drawing.");
-        jToggleButton3.setFocusable(false);
-        jToggleButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jToggleButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(btnOval);
+        btnOval.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/oval.png"))); // NOI18N
+        btnOval.setToolTipText("Select an oval for drawing.");
+        btnOval.setFocusable(false);
+        btnOval.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnOval.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOval.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton3ActionPerformed(evt);
+                btnOvalActionPerformed(evt);
             }
         });
-        jToolBar1.add(jToggleButton3);
+        jToolBar1.add(btnOval);
         jToolBar1.add(jSeparator2);
 
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/color-f.png"))); // NOI18N
-        jButton7.setToolTipText("Set foreground color...");
-        jButton7.setFocusable(false);
-        jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        btnFGColor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/color-f.png"))); // NOI18N
+        btnFGColor.setToolTipText("Set foreground color...");
+        btnFGColor.setFocusable(false);
+        btnFGColor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnFGColor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnFGColor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                btnFGColorActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton7);
+        jToolBar1.add(btnFGColor);
 
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/color-b.png"))); // NOI18N
-        jButton8.setToolTipText("Set background color...");
-        jButton8.setFocusable(false);
-        jButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        btnBGColor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/color-b.png"))); // NOI18N
+        btnBGColor.setToolTipText("Set background color...");
+        btnBGColor.setFocusable(false);
+        btnBGColor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnBGColor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnBGColor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                btnBGColorActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton8);
+        jToolBar1.add(btnBGColor);
 
-        jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/fill.png"))); // NOI18N
-        jToggleButton1.setToolTipText("Fill shapes.");
-        jToggleButton1.setFocusable(false);
-        jToggleButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jToggleButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jToggleButton1);
+        btnFilled.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/fill.png"))); // NOI18N
+        btnFilled.setToolTipText("Fill shapes.");
+        btnFilled.setFocusable(false);
+        btnFilled.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnFilled.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnFilled.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilledActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnFilled);
         jToolBar1.add(jSeparator3);
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/help.png"))); // NOI18N
-        jButton6.setToolTipText("About this program...");
-        jButton6.setFocusable(false);
-        jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        btnAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/help.png"))); // NOI18N
+        btnAbout.setToolTipText("About this program...");
+        btnAbout.setFocusable(false);
+        btnAbout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAbout.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                btnAboutActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton6);
+        jToolBar1.add(btnAbout);
 
-        javax.swing.GroupLayout drawPanel1Layout = new javax.swing.GroupLayout(drawPanel1);
-        drawPanel1.setLayout(drawPanel1Layout);
-        drawPanel1Layout.setHorizontalGroup(
-            drawPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlDrawLayout = new javax.swing.GroupLayout(pnlDraw);
+        pnlDraw.setLayout(pnlDrawLayout);
+        pnlDrawLayout.setHorizontalGroup(
+            pnlDrawLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        drawPanel1Layout.setVerticalGroup(
-            drawPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlDrawLayout.setVerticalGroup(
+            pnlDrawLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 577, Short.MAX_VALUE)
         );
 
-        jMenu1.setText("File");
+        mmiFile.setText("File");
 
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/new.png"))); // NOI18N
-        jMenuItem2.setText("New drawing");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        mmiNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/new.png"))); // NOI18N
+        mmiNew.setText("New drawing");
+        mmiNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                mmiNewActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        mmiFile.add(mmiNew);
 
-        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/open.png"))); // NOI18N
-        jMenuItem3.setText("Open drawing");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        mmiOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/open.png"))); // NOI18N
+        mmiOpen.setText("Open drawing");
+        mmiOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                mmiOpenActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
-        jMenu1.add(jSeparator4);
+        mmiFile.add(mmiOpen);
+        mmiFile.add(jSeparator4);
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/exit.png"))); // NOI18N
-        jMenuItem1.setText("Quit");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        mmiQuit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/exit.png"))); // NOI18N
+        mmiQuit.setText("Quit");
+        mmiQuit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                mmiQuitActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        mmiFile.add(mmiQuit);
 
-        jMenuBar1.add(jMenu1);
+        mmMainMenu.add(mmiFile);
 
-        jMenu2.setText("Edit");
+        mmiEdit.setText("Edit");
 
-        jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/color-f.png"))); // NOI18N
-        jMenuItem5.setText("Foreground color...");
-        jMenu2.add(jMenuItem5);
+        mmiFGColor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/color-f.png"))); // NOI18N
+        mmiFGColor.setText("Foreground color...");
+        mmiEdit.add(mmiFGColor);
 
-        jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/color-b.png"))); // NOI18N
-        jMenuItem6.setText("Background color...");
-        jMenu2.add(jMenuItem6);
-        jMenu2.add(jSeparator5);
+        mmiBGColor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/color-b.png"))); // NOI18N
+        mmiBGColor.setText("Background color...");
+        mmiEdit.add(mmiBGColor);
+        mmiEdit.add(jSeparator5);
 
-        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/settings.png"))); // NOI18N
-        jMenuItem4.setText("Settings");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        mmiSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/settings.png"))); // NOI18N
+        mmiSettings.setText("Settings");
+        mmiSettings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                mmiSettingsActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem4);
+        mmiEdit.add(mmiSettings);
 
-        jMenuBar1.add(jMenu2);
+        mmMainMenu.add(mmiEdit);
 
-        jMenu3.setText("Help");
+        mmiHelp.setText("Help");
 
-        jMenuItem7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/help.png"))); // NOI18N
-        jMenuItem7.setText("About...");
-        jMenu3.add(jMenuItem7);
+        mmiAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/help.png"))); // NOI18N
+        mmiAbout.setText("About...");
+        mmiHelp.add(mmiAbout);
 
-        jMenuBar1.add(jMenu3);
+        mmMainMenu.add(mmiHelp);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(mmMainMenu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
-            .addComponent(drawPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlDraw, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(drawPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pnlDraw, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void btnNewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewMouseClicked
         
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_btnNewMouseClicked
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void btnFGColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFGColorActionPerformed
         Color selectedColor = JColorChooser.showDialog(this, "Select foreground color...", Color.BLUE);
-        drawPanel1.setCurrentForegroundColor(selectedColor);
-    }//GEN-LAST:event_jButton7ActionPerformed
+        pnlDraw.setCurrentForegroundColor(selectedColor);
+    }//GEN-LAST:event_btnFGColorActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void btnBGColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBGColorActionPerformed
         Color selectedColor = JColorChooser.showDialog(this, "Select background color...", Color.BLUE);
-        drawPanel1.setCurrentBackgroundColor(selectedColor);
-    }//GEN-LAST:event_jButton8ActionPerformed
+        pnlDraw.setCurrentBackgroundColor(selectedColor);
+    }//GEN-LAST:event_btnBGColorActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void btnAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutActionPerformed
         //AboutFrame frmAbout = new AboutFrame();
         new AboutFrame().setVisible(true);
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_btnAboutActionPerformed
 
-    private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
-        drawPanel1.setDrawMode(1);
-    }//GEN-LAST:event_jToggleButton2ActionPerformed
+    private void btnRectangleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRectangleActionPerformed
+        pnlDraw.setDrawMode(1);
+    }//GEN-LAST:event_btnRectangleActionPerformed
 
-    private void jToggleButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
-        drawPanel1.setDrawMode(2);
-    }//GEN-LAST:event_jToggleButton3ActionPerformed
+    private void btnOvalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOvalActionPerformed
+        pnlDraw.setDrawMode(2);
+    }//GEN-LAST:event_btnOvalActionPerformed
 
-    private void jToggleButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton4ActionPerformed
-        drawPanel1.setDrawMode(0);
-    }//GEN-LAST:event_jToggleButton4ActionPerformed
+    private void btnLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLineActionPerformed
+        pnlDraw.setDrawMode(0);
+    }//GEN-LAST:event_btnLineActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void mmiQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mmiQuitActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_mmiQuitActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void mmiNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mmiNewActionPerformed
         String drawing = (String)JOptionPane.showInputDialog(this, "Please enter a name for your new drawing.", "New drawing...", JOptionPane.PLAIN_MESSAGE, null, null, "");
         
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_mmiNewActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        jMenuItem2.doClick();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        mmiNew.doClick();
+    }//GEN-LAST:event_btnNewActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+    private void mmiSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mmiSettingsActionPerformed
         SettingsDialog dlgSettings = new SettingsDialog();
         dlgSettings.setVisible(true);
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    }//GEN-LAST:event_mmiSettingsActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void mmiOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mmiOpenActionPerformed
         DialogOpen dlgOpen = new DialogOpen();
         dlgOpen.setVisible(true);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_mmiOpenActionPerformed
 
+    private void btnFilledActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilledActionPerformed
+        pnlDraw.setFilled(!pnlDraw.getFilled());
+    }//GEN-LAST:event_btnFilledActionPerformed
+    
     /**
      * @param args the command line arguments
      */
@@ -451,34 +473,34 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAbout;
+    private javax.swing.JButton btnBGColor;
+    private javax.swing.JButton btnFGColor;
+    private javax.swing.JToggleButton btnFilled;
+    private javax.swing.JToggleButton btnLine;
+    private javax.swing.JButton btnNew;
+    private javax.swing.JButton btnOpen;
+    private javax.swing.JToggleButton btnOval;
+    private javax.swing.JToggleButton btnRectangle;
     private javax.swing.ButtonGroup buttonGroup1;
-    private vectracl.DrawPanel drawPanel1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
-    private javax.swing.JToggleButton jToggleButton1;
-    private javax.swing.JToggleButton jToggleButton2;
-    private javax.swing.JToggleButton jToggleButton3;
-    private javax.swing.JToggleButton jToggleButton4;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JMenuBar mmMainMenu;
+    private javax.swing.JMenuItem mmiAbout;
+    private javax.swing.JMenuItem mmiBGColor;
+    private javax.swing.JMenu mmiEdit;
+    private javax.swing.JMenuItem mmiFGColor;
+    private javax.swing.JMenu mmiFile;
+    private javax.swing.JMenu mmiHelp;
+    private javax.swing.JMenuItem mmiNew;
+    private javax.swing.JMenuItem mmiOpen;
+    private javax.swing.JMenuItem mmiQuit;
+    private javax.swing.JMenuItem mmiSettings;
+    private vectracl.DrawPanel pnlDraw;
     // End of variables declaration//GEN-END:variables
     public XMLManager xmlMgr;
 }

@@ -21,6 +21,7 @@ public class Line extends BaseShape {
     
     @Override
     public void drawShape(Graphics g) {
-        g.drawLine(getX(), getY(), getWidth(), getHeight());
+        g.setColor(color);
+        g.drawLine(x, y, width, height);
     }
 }
