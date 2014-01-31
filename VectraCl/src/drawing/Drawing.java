@@ -24,14 +24,16 @@ public class Drawing {
     public Drawing() {
         System.out.println("Drawing INIT...");
         xmlMgr = new XMLManager();
-        xmlMgr.setServerName("http://vectra.local/index.php");
-        xmlMgr.setUser("pwarnimo");
-        xmlMgr.setDrawing("CassieHicks");
+        //xmlMgr.setServerName("http://vectra.local/index.php");
+        //xmlMgr.setUser("cassie");
+        //xmlMgr.setDrawing("CassieHicks");
         System.out.println("Drawing OK");
     }
     
     public void setDrawingName(String drawingName) {
+        //shapes.clear();
         xmlMgr.setDrawing(drawingName);
+        //shapes = xmlMgr.loadDrawingXML();
     }
     
     public String getDrawingName() {
@@ -44,6 +46,10 @@ public class Drawing {
     
     public String getUser() {
         return xmlMgr.getUser();
+    }
+    
+    public void setServer(String server) {
+        xmlMgr.setServerName(server);
     }
     
     public void newDrawing(String drawingName, String user) {
@@ -90,6 +96,10 @@ public class Drawing {
         else {
             return null;
         }
+    }
+    
+    public ArrayList<String> getDrawings() {
+        return xmlMgr.getDrawings();
     }
     
     public void drawEverything(Graphics g) {

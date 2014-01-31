@@ -20,6 +20,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import xml.XMLManager;
@@ -65,8 +66,9 @@ public class DrawPanel extends JPanel {
     public void paintComponent(Graphics g) { 
         super.paintComponent(g);
         
+        //g.clearRect(0, 0, this.getWidth(), this.getHeight());
         //setForeground(Color.blue);
-        g.drawString("VECTRA CLIENT 0.9 - You are " + drw0.getUser(), 2, 12);
+        g.drawString("VECTRA CLIENT 0.9 - You are " + drw0.getUser() + " and you are drawing on " + drw0.getDrawingName(), 2, 12);
         drw0.drawEverything(g);
     }
     
@@ -88,6 +90,8 @@ public class DrawPanel extends JPanel {
     
     public void setDrawingName(String drawingName) {
         drw0.setDrawingName(drawingName);
+        //drw0.loadDrawing();
+        repaint();
     }
     
     public String getDrawingName() {
@@ -102,8 +106,17 @@ public class DrawPanel extends JPanel {
         return drw0.getUser();
     }
     
+    public void setServer(String server) {
+        drw0.setServer(server);
+    }
+    
+    public ArrayList<String> getDrawings() {
+        return drw0.getDrawings();
+    }
+    
     public void loadDrawing() {
         drw0.loadDrawing();
+        repaint();
     }
     
     public void loadDiff() {
@@ -111,8 +124,9 @@ public class DrawPanel extends JPanel {
         this.repaint();
     }
     
-    public void newDrawing(String drawingName, String user) {
-        drw0.newDrawing(drawingName, user);
+    public void newDrawing(String drawingName) {
+        drw0.newDrawing(drawingName, drw0.getUser());
+        repaint();
     }
     
     public void setFilled(boolean filled) {

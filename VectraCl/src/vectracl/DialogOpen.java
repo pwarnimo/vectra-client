@@ -6,6 +6,14 @@
 
 package vectracl;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import xml.XMLManager;
@@ -19,6 +27,8 @@ public class DialogOpen extends javax.swing.JFrame {
     /**
      * Creates new form DialogOpen
      */
+    private DrawPanel dpanel;
+    
     public DialogOpen() {
         initComponents();
         
@@ -27,11 +37,17 @@ public class DialogOpen extends javax.swing.JFrame {
         setIconImage(new ImageIcon(getClass().getResource("/resource/vectra.png")).getImage());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
-        XMLManager mgrXML = new XMLManager();
+        /*XMLManager mgrXML = new XMLManager();
         mgrXML.setUser("pwarnimo");
         mgrXML.setServerName("http://vectra.local/index.php");
         
-        lstDrawings.setListData(mgrXML.getDrawings().toArray());
+        lstDrawings.setListData(mgrXML.getDrawings().toArray());*/
+    }
+    
+    public void setDrawPanel(DrawPanel dpanel) {
+        this.dpanel = dpanel;
+        
+        lstDrawings.setListData(dpanel.getDrawings().toArray());
     }
 
     /**
@@ -79,6 +95,11 @@ public class DialogOpen extends javax.swing.JFrame {
 
         btnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/open.png"))); // NOI18N
         btnOpen.setText("Open");
+        btnOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenActionPerformed(evt);
+            }
+        });
 
         btnDiscard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/cancel.png"))); // NOI18N
         btnDiscard.setText("Discard");
@@ -116,6 +137,43 @@ public class DialogOpen extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+        Properties prop = new Properties();
+        InputStream input = null;
+        FileOutputStream out = null;
+        try {     
+            input = new FileInputStream("config.properties");
+            
+            prop.load(input);
+            prop.setProperty("drawing", lstDrawings.getSelectedValue().toString());
+
+            System.out.println("SET->PROP=DRAWING->" + prop.getProperty("drawing"));
+            
+            out = new FileOutputStream("config.properties");
+            prop.store(out, null);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DialogOpen.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(DialogOpen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            if (input != null) {
+                try {
+                    input.close();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        dpanel.setDrawingName(lstDrawings.getSelectedValue().toString());
+        dpanel.loadDrawing();
+        dpanel.repaint();
+        
+        this.dispose();
+    }//GEN-LAST:event_btnOpenActionPerformed
 
     /**
      * @param args the command line arguments

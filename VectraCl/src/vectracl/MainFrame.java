@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -47,6 +48,16 @@ public class MainFrame extends javax.swing.JFrame {
         
         initComponents();
         
+        ActionListener diffUpdate = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pnlDraw.loadDiff();
+            }
+        };
+        
+        Timer tmDiff = new Timer(1000, diffUpdate);
+        //tmDiff.start();
+        
         //drawPanel1.newDrawing("drw0", "pwarnimo");
         
         xmlMgr = new XMLManager();
@@ -69,10 +80,13 @@ public class MainFrame extends javax.swing.JFrame {
 		System.out.println("INIT->PROP=USERNAME->" + prop.getProperty("username"));
 		System.out.println("INIT->PROP=DRAWING->" + prop.getProperty("drawing"));
                 
+                pnlDraw.setServer(prop.getProperty("server"));
                 pnlDraw.setUser(prop.getProperty("username"));
                 pnlDraw.setDrawingName(prop.getProperty("drawing"));
                 pnlDraw.loadDrawing();
                 //drawPanel1.loadDiff();
+                
+                //tmDiff.start();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -92,7 +106,10 @@ public class MainFrame extends javax.swing.JFrame {
         else {
             System.out.println("> No config.properties found! Starting from scratch...");
             FirstStartDialog dlgStart = new FirstStartDialog();
+            dlgStart.setTmDiff(tmDiff);
+            dlgStart.setDrawPanel(pnlDraw);
             dlgStart.setVisible(true);
+            //pnlDraw.loadDrawing();
             System.out.println("> Initialized!");
         }
         
@@ -114,16 +131,6 @@ public class MainFrame extends javax.swing.JFrame {
         dlgStart.setVisible(true);
         
         System.out.println("*** DEBUG OPTIONS ***");*/
-            
-        ActionListener diffUpdate = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pnlDraw.loadDiff();
-            }
-        };
-        
-        Timer tmDiff = new Timer(1000, diffUpdate);
-        tmDiff.start();
     }
 
     /**
@@ -417,6 +424,39 @@ public class MainFrame extends javax.swing.JFrame {
     private void mmiNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mmiNewActionPerformed
         String drawing = (String)JOptionPane.showInputDialog(this, "Please enter a name for your new drawing.", "New drawing...", JOptionPane.PLAIN_MESSAGE, null, null, "");
         
+        Properties prop = new Properties();
+        InputStream input = null;
+        FileOutputStream out = null;
+        try {     
+            input = new FileInputStream("config.properties");
+            
+            prop.load(input);
+            prop.setProperty("drawing", drawing);
+
+            System.out.println("SET->PROP=DRAWING->" + prop.getProperty("drawing"));
+            
+            out = new FileOutputStream("config.properties");
+            prop.store(out, null);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DialogOpen.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(DialogOpen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            if (input != null) {
+                try {
+                    input.close();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        pnlDraw.newDrawing(drawing);
+        pnlDraw.setDrawingName(drawing);
+        pnlDraw.loadDrawing();
+        pnlDraw.repaint();
     }//GEN-LAST:event_mmiNewActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
@@ -430,6 +470,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void mmiOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mmiOpenActionPerformed
         DialogOpen dlgOpen = new DialogOpen();
+        dlgOpen.setDrawPanel(pnlDraw);
         dlgOpen.setVisible(true);
     }//GEN-LAST:event_mmiOpenActionPerformed
 

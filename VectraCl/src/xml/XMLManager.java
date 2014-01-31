@@ -476,4 +476,9 @@ public class XMLManager {
             return null;
         }
     }
+    
+    public String editShapeXML(BaseShape shape) {
+        
+        return null;
+    }
 }

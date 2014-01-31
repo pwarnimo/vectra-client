@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import xml.XMLManager;
 
 /**
@@ -28,6 +29,10 @@ public class FirstStartDialog extends javax.swing.JFrame {
     /**
      * Creates new form FirstStartDialog
      */
+    private Timer tmDiff;
+    private XMLManager xmlMgr;
+    private DrawPanel dpanel;
+    
     public FirstStartDialog() {
         initComponents();
         
@@ -36,11 +41,19 @@ public class FirstStartDialog extends javax.swing.JFrame {
         setIconImage(new ImageIcon(getClass().getResource("/resource/vectra.png")).getImage());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
-        xmlMgr = new XMLManager();
+        //xmlMgr = new XMLManager();
     }
 
     public void setList(ArrayList<String> drawings) {
         lstDrawings.setListData(drawings.toArray());
+    }
+    
+    public void setTmDiff(Timer tmDiff) {
+        this.tmDiff = tmDiff;
+    }
+    
+    public void setDrawPanel(DrawPanel dpanel) {
+        this.dpanel = dpanel;
     }
     
     /**
@@ -245,10 +258,12 @@ public class FirstStartDialog extends javax.swing.JFrame {
         }
         else {
             //applySettings();
-            xmlMgr.setUser(edtUsername.getText());
-            xmlMgr.setServerName(edtHostname.getText());
+            //xmlMgr.setUser(edtUsername.getText());
+            //xmlMgr.setServerName(edtHostname.getText());
+            dpanel.setUser(edtUsername.getText());
+            dpanel.setServer(edtHostname.getText());
             
-            setList(xmlMgr.getDrawings());
+            setList(dpanel.getDrawings());
         }
     }//GEN-LAST:event_btnRefreshActionPerformed
 
@@ -261,19 +276,26 @@ public class FirstStartDialog extends javax.swing.JFrame {
         
         System.out.println("> DRAWING SELECTED : " + lstDrawings.getSelectedValue());
         
+        dpanel.loadDrawing();
+        
+        tmDiff.start();
+        
         this.dispose();
     }//GEN-LAST:event_btnOkActionPerformed
 
     private void btnDrawingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDrawingActionPerformed
         String drawing = (String)JOptionPane.showInputDialog(this, "Please enter a name for your new drawing.", "New drawing...", JOptionPane.PLAIN_MESSAGE, null, null, "");
         
-        System.out.println(xmlMgr.createDrawingXML(drawing));
-        setList(xmlMgr.getDrawings());
+        //System.out.println(dpanel.createDrawingXML(drawing));
+        dpanel.newDrawing(drawing);
+        dpanel.loadDrawing();
+        setList(dpanel.getDrawings());
     }//GEN-LAST:event_btnDrawingActionPerformed
 
     public void applySettings() {
-        xmlMgr.setUser(edtUsername.getText());
-        xmlMgr.setServerName(edtHostname.getText());
+        dpanel.setUser(edtUsername.getText());
+        dpanel.setServer(edtHostname.getText());
+        dpanel.setDrawingName(lstDrawings.getSelectedValue().toString());
         
         Properties prop = new Properties();
 	OutputStream output = null;
@@ -358,5 +380,4 @@ public class FirstStartDialog extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList lstDrawings;
     // End of variables declaration//GEN-END:variables
-    private XMLManager xmlMgr;
 }
