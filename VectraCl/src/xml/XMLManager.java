@@ -85,6 +85,51 @@ public class XMLManager {
         return servername;
     }
     
+    public String postData(String parameters) {
+        System.out.println(">>REQ=" + parameters);
+            
+        URL url;
+        HttpURLConnection connection = null;
+
+        try {
+            url = new URL(servername);
+
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "text/xml");
+
+            connection.setRequestProperty("Content-Length", Integer.toString(parameters.getBytes().length));
+            connection.setRequestProperty("Content-Language", "en-US");
+
+            connection.setUseCaches(false);
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+
+            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(parameters);
+            wr.flush();
+            wr.close();
+
+            InputStream is = connection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            String line;
+            StringBuffer response = new StringBuffer();
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+
+            return response.toString().trim();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (IOException ex) {
+            Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
     public String createDrawingXML(String drawing) {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -98,94 +143,14 @@ public class XMLManager {
             rootElement.setAttribute("cmd", "create");
             
             doc.appendChild(rootElement);
-            
-            
-            //String xml = "";
-            
-            DOMSource source = new DOMSource(doc);
-            
-            //TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            //Transformer transformer = transformerFactory.newTransformer();
-            
+
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer();
-            //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            //transformer.setOutputProperty(OutputKeys.ENCODING, "US-ASCII");
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
             String xml = writer.getBuffer().toString().replaceAll("\n|\r", "");
             
-            //String xml = "";
-            
-            
-            //StreamResult result =  new StreamResult(xml);
-            //transformer.transform(source, result);
-
-            String parameters = xml;
-             
-            System.out.println(">>REQ=" + xml);
-            
-            URL url;
-            HttpURLConnection connection = null;
-            
-            try {
-                url = new URL(servername);
-                
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "text/xml");
-                
-                connection.setRequestProperty("Content-Length", Integer.toString(parameters.getBytes().length));
-                connection.setRequestProperty("Content-Language", "en-US");
-
-                connection.setUseCaches(false);
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
-                
-                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                wr.writeBytes(parameters);
-                wr.flush();
-                wr.close();
-                
-                InputStream is = connection.getInputStream();
-                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-                String line;
-                StringBuffer response = new StringBuffer();
-                while ((line = rd.readLine()) != null) {
-                    response.append(line);
-                    response.append('\r');
-                }
-                rd.close();
-                
-                return response.toString().trim();
-                
-                /*InputSource is2;
-                is2 = new InputSource(new StringReader(response.toString().trim()));
-                
-                //System.out.println(response.toString().trim());
-                
-                doc = docBuilder.parse(is2);
-                //doc.getDocumentElement().normalize();
-                
-                NodeList nList = doc.getElementsByTagName("drawing");
-                
-                /*for (int temp = 0; temp < nList.getLength(); temp++) {
-                    Node nNode = nList.item(temp);
-                    
-                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element eElement = (Element) nNode;
- 
-			drawings.add(eElement.getAttribute("id"));
-                    }
-                }*/
-                
-                //return drawings;
-                //return response.toString().trim();
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            postData(xml);
             
             return null;
         } catch (ParserConfigurationException ex) {
@@ -215,140 +180,78 @@ public class XMLManager {
             
             doc.appendChild(rootElement);
             
-            //TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            //Transformer transformer = transformerFactory.newTransformer();
-            
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer();
-            //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            //transformer.setOutputProperty(OutputKeys.ENCODING, "US-ASCII");
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
             String xml = writer.getBuffer().toString().replaceAll("\n|\r", "");
             
-            //String xml = "";
+            InputSource is;
+            is = new InputSource(new StringReader(postData(xml)));
             
-            DOMSource source = new DOMSource(doc);
-            
-            //StreamResult result =  new StreamResult(xml);
-            //transformer.transform(source, result);
+            doc = docBuilder.parse(is);
+       
+            NodeList nList = doc.getElementsByTagName("element");
+                
+            ArrayList<BaseShape> tmp = new ArrayList<>();
 
-            String parameters = xml;
-             
-            System.out.println(">>REQ=" + xml);
-            
-            URL url;
-            HttpURLConnection connection = null;
-            
-            try {
-                url = new URL(servername);
-                
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "text/xml");
-                
-                connection.setRequestProperty("Content-Length", Integer.toString(parameters.getBytes().length));
-                connection.setRequestProperty("Content-Language", "en-US");
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node nNode = nList.item(temp);
 
-                connection.setUseCaches(false);
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
-                
-                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                wr.writeBytes(parameters);
-                wr.flush();
-                wr.close();
-                
-                InputStream is = connection.getInputStream();
-                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-                String line;
-                StringBuffer response = new StringBuffer();
-                while ((line = rd.readLine()) != null) {
-                    response.append(line);
-                    response.append('\r');
-                }
-                rd.close();
-                
-                System.out.println(response.toString().trim());
-                
-                InputSource is2;
-                is2 = new InputSource(new StringReader(response.toString().trim()));
-                
-                //System.out.println(response.toString().trim());
-                
-                doc = docBuilder.parse(is2);
-                //doc.getDocumentElement().normalize();
-                
-                NodeList nList = doc.getElementsByTagName("element");
-                
-                ArrayList<BaseShape> tmp = new ArrayList<>();
-                
-                for (int temp = 0; temp < nList.getLength(); temp++) {
-                    Node nNode = nList.item(temp);
-                    
-                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element eElement = (Element) nNode;
- 
-                        int type = Integer.valueOf(eElement.getAttribute("type"));
-                        Boolean filled = Boolean.valueOf(eElement.getAttribute("filled"));
-                        
-                        switch (type) {
-                            case 0 :
-                                System.out.println("Creating line...");
-                                Line ln0 = new Line(Integer.valueOf(eElement.getAttribute("id")), 
-                                        Integer.valueOf(eElement.getAttribute("x")), 
-                                        Integer.valueOf(eElement.getAttribute("y")),
-                                        Integer.valueOf(eElement.getAttribute("width")), 
-                                        Integer.valueOf(eElement.getAttribute("height")), 
-                                        Color.decode(eElement.getAttribute("color")), 
-                                        filled);
-                                
-                                tmp.add(ln0);
-                                
-                                break;
-                                
-                            case 1 : 
-                                System.out.println("Creating rectangle...");
-                                Rectangle rect0 = new Rectangle(Integer.valueOf(eElement.getAttribute("id")), 
-                                        Integer.valueOf(eElement.getAttribute("x")), 
-                                        Integer.valueOf(eElement.getAttribute("y")),
-                                        Integer.valueOf(eElement.getAttribute("width")), 
-                                        Integer.valueOf(eElement.getAttribute("height")), 
-                                        Color.decode(eElement.getAttribute("color")), 
-                                        filled);
-                                
-                                tmp.add(rect0);
-                                
-                                break;
-                                
-                            case 2 :
-                                System.out.println("Creating oval...");
-                                Oval oval0 = new Oval(Integer.valueOf(eElement.getAttribute("id")), 
-                                        Integer.valueOf(eElement.getAttribute("x")), 
-                                        Integer.valueOf(eElement.getAttribute("y")),
-                                        Integer.valueOf(eElement.getAttribute("width")), 
-                                        Integer.valueOf(eElement.getAttribute("height")), 
-                                        Color.decode(eElement.getAttribute("color")), 
-                                        filled);
-                                
-                                tmp.add(oval0);
-                                
-                                break;
-                        }
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+
+                    int type = Integer.valueOf(eElement.getAttribute("type"));
+                    Boolean filled = Boolean.valueOf(eElement.getAttribute("filled"));
+
+                    switch (type) {
+                        case 0 :
+                            System.out.println("Creating line...");
+                            Line ln0 = new Line(Integer.valueOf(eElement.getAttribute("id")), 
+                                    Integer.valueOf(eElement.getAttribute("x")), 
+                                    Integer.valueOf(eElement.getAttribute("y")),
+                                    Integer.valueOf(eElement.getAttribute("width")), 
+                                    Integer.valueOf(eElement.getAttribute("height")), 
+                                    Color.decode(eElement.getAttribute("color")), 
+                                    filled);
+
+                            tmp.add(ln0);
+
+                            break;
+
+                        case 1 : 
+                            System.out.println("Creating rectangle...");
+                            Rectangle rect0 = new Rectangle(Integer.valueOf(eElement.getAttribute("id")), 
+                                    Integer.valueOf(eElement.getAttribute("x")), 
+                                    Integer.valueOf(eElement.getAttribute("y")),
+                                    Integer.valueOf(eElement.getAttribute("width")), 
+                                    Integer.valueOf(eElement.getAttribute("height")), 
+                                    Color.decode(eElement.getAttribute("color")), 
+                                    filled);
+
+                            tmp.add(rect0);
+
+                            break;
+
+                        case 2 :
+                            System.out.println("Creating oval...");
+                            Oval oval0 = new Oval(Integer.valueOf(eElement.getAttribute("id")), 
+                                    Integer.valueOf(eElement.getAttribute("x")), 
+                                    Integer.valueOf(eElement.getAttribute("y")),
+                                    Integer.valueOf(eElement.getAttribute("width")), 
+                                    Integer.valueOf(eElement.getAttribute("height")), 
+                                    Color.decode(eElement.getAttribute("color")), 
+                                    filled);
+
+                            tmp.add(oval0);
+
+                            break;
                     }
                 }
-                
-                return tmp;
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SAXException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            return null;
-        } catch (ParserConfigurationException ex) {
+
+            return tmp;
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         } catch (TransformerConfigurationException ex) {
@@ -374,142 +277,76 @@ public class XMLManager {
             
             doc.appendChild(rootElement);
             
-            //TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            //Transformer transformer = transformerFactory.newTransformer();
-            
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer();
-            //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            //transformer.setOutputProperty(OutputKeys.ENCODING, "US-ASCII");
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
             String xml = writer.getBuffer().toString().replaceAll("\n|\r", "");
             
-            //String xml = "";
-            
-            DOMSource source = new DOMSource(doc);
-            
-            //StreamResult result =  new StreamResult(xml);
-            //transformer.transform(source, result);
+            InputSource is;
+            is = new InputSource(new StringReader(postData(xml)));
+     
+            doc = docBuilder.parse(is);
+      
+            NodeList nList = doc.getElementsByTagName("element");
 
-            String parameters = xml;
-             
-            System.out.println(">>REQ=" + xml);
-            
-            URL url;
-            HttpURLConnection connection = null;
-            
-            try {
-                url = new URL(servername);
-                
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "text/xml");
-                
-                connection.setRequestProperty("Content-Length", Integer.toString(parameters.getBytes().length));
-                connection.setRequestProperty("Content-Language", "en-US");
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node nNode = nList.item(temp);
 
-                connection.setUseCaches(false);
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
-                
-                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                wr.writeBytes(parameters);
-                wr.flush();
-                wr.close();
-                
-                InputStream is = connection.getInputStream();
-                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-                String line;
-                StringBuffer response = new StringBuffer();
-                while ((line = rd.readLine()) != null) {
-                    response.append(line);
-                    response.append('\r');
-                }
-                rd.close();
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
 
-                //System.out.println(response.toString().trim());
-                
-                System.out.println(response.toString().trim());
-                
-                InputSource is2;
-                is2 = new InputSource(new StringReader(response.toString().trim()));
-                
-                //System.out.println(response.toString().trim());
-                
-                doc = docBuilder.parse(is2);
-                //doc.getDocumentElement().normalize();
-                
-                NodeList nList = doc.getElementsByTagName("element");
-                
-                //ArrayList<BaseShape> tmp = new ArrayList<>();
-                
-                for (int temp = 0; temp < nList.getLength(); temp++) {
-                    Node nNode = nList.item(temp);
-                    
-                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element eElement = (Element) nNode;
- 
-                        int type = Integer.valueOf(eElement.getAttribute("type"));
-                        Boolean filled = Boolean.valueOf(eElement.getAttribute("filled"));
-                        
-                        switch (type) {
-                            case 0 :
-                                System.out.println("Creating line...");
-                                Line ln0 = new Line(Integer.valueOf(eElement.getAttribute("id")), 
-                                        Integer.valueOf(eElement.getAttribute("x")), 
-                                        Integer.valueOf(eElement.getAttribute("y")),
-                                        Integer.valueOf(eElement.getAttribute("width")), 
-                                        Integer.valueOf(eElement.getAttribute("height")), 
-                                        Color.decode(eElement.getAttribute("color")), 
-                                        filled);
-                                
-                                tmp.add(ln0);
-                                
-                                break;
-                                
-                            case 1 : 
-                                System.out.println("Creating rectangle...");
-                                Rectangle rect0 = new Rectangle(Integer.valueOf(eElement.getAttribute("id")), 
-                                        Integer.valueOf(eElement.getAttribute("x")), 
-                                        Integer.valueOf(eElement.getAttribute("y")),
-                                        Integer.valueOf(eElement.getAttribute("width")), 
-                                        Integer.valueOf(eElement.getAttribute("height")), 
-                                        Color.decode(eElement.getAttribute("color")), 
-                                        filled);
-                                
-                                tmp.add(rect0);
-                                
-                                break;
-                                
-                            case 2 :
-                                System.out.println("Creating oval...");
-                                Oval oval0 = new Oval(Integer.valueOf(eElement.getAttribute("id")), 
-                                        Integer.valueOf(eElement.getAttribute("x")), 
-                                        Integer.valueOf(eElement.getAttribute("y")),
-                                        Integer.valueOf(eElement.getAttribute("width")), 
-                                        Integer.valueOf(eElement.getAttribute("height")), 
-                                        Color.decode(eElement.getAttribute("color")), 
-                                        filled);
-                                
-                                tmp.add(oval0);
-                                
-                                break;
-                        }
+                    int type = Integer.valueOf(eElement.getAttribute("type"));
+                    Boolean filled = Boolean.valueOf(eElement.getAttribute("filled"));
+
+                    switch (type) {
+                        case 0 :
+                            System.out.println("Creating line...");
+                            Line ln0 = new Line(Integer.valueOf(eElement.getAttribute("id")), 
+                                    Integer.valueOf(eElement.getAttribute("x")), 
+                                    Integer.valueOf(eElement.getAttribute("y")),
+                                    Integer.valueOf(eElement.getAttribute("width")), 
+                                    Integer.valueOf(eElement.getAttribute("height")), 
+                                    Color.decode(eElement.getAttribute("color")), 
+                                    filled);
+
+                            tmp.add(ln0);
+
+                            break;
+
+                        case 1 : 
+                            System.out.println("Creating rectangle...");
+                            Rectangle rect0 = new Rectangle(Integer.valueOf(eElement.getAttribute("id")), 
+                                    Integer.valueOf(eElement.getAttribute("x")), 
+                                    Integer.valueOf(eElement.getAttribute("y")),
+                                    Integer.valueOf(eElement.getAttribute("width")), 
+                                    Integer.valueOf(eElement.getAttribute("height")), 
+                                    Color.decode(eElement.getAttribute("color")), 
+                                    filled);
+
+                            tmp.add(rect0);
+
+                            break;
+
+                        case 2 :
+                            System.out.println("Creating oval...");
+                            Oval oval0 = new Oval(Integer.valueOf(eElement.getAttribute("id")), 
+                                    Integer.valueOf(eElement.getAttribute("x")), 
+                                    Integer.valueOf(eElement.getAttribute("y")),
+                                    Integer.valueOf(eElement.getAttribute("width")), 
+                                    Integer.valueOf(eElement.getAttribute("height")), 
+                                    Color.decode(eElement.getAttribute("color")), 
+                                    filled);
+
+                            tmp.add(oval0);
+
+                            break;
                     }
                 }
-                
-                return tmp;
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SAXException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+                
             return null;
-        } catch (ParserConfigurationException ex) {
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         } catch (TransformerConfigurationException ex) {
@@ -540,13 +377,6 @@ public class XMLManager {
             element.setAttribute("y", String.valueOf(shape.getY()));
             element.setAttribute("width", String.valueOf(shape.getWidth()));
             element.setAttribute("height", String.valueOf(shape.getHeight()));
-            //element.setAttribute("color", shape.getColor().toString());
-            
-            /*int r = shape.getColor().getRed();
-            int g = shape.getColor().getGreen();
-            int b = shape.getColor().getBlue();
-            
-            String hex = String.format("#%02x%02x%02x", r, g, b);*/
             
             String rgb = Integer.toHexString(shape.getColor().getRGB());
             rgb = "#" + rgb.substring(2, rgb.length());
@@ -576,68 +406,13 @@ public class XMLManager {
             
             doc.appendChild(rootElement);
             
-            //TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            //Transformer transformer = transformerFactory.newTransformer();
-            
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer();
-            //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            //transformer.setOutputProperty(OutputKeys.ENCODING, "US-ASCII");
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
             String xml = writer.getBuffer().toString().replaceAll("\n|\r", "");
             
-            //String xml = "";
-            
-            DOMSource source = new DOMSource(doc);
-            
-            //StreamResult result =  new StreamResult(xml);
-            //transformer.transform(source, result);
-
-            String parameters = xml;
-             
-            System.out.println(">>REQ=" + xml);
-            
-            URL url;
-            HttpURLConnection connection = null;
-            
-            try {
-                url = new URL(servername);
-                
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "text/xml");
-                
-                connection.setRequestProperty("Content-Length", Integer.toString(parameters.getBytes().length));
-                connection.setRequestProperty("Content-Language", "en-US");
-
-                connection.setUseCaches(false);
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
-                
-                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                wr.writeBytes(parameters);
-                wr.flush();
-                wr.close();
-                
-                InputStream is = connection.getInputStream();
-                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-                String line;
-                StringBuffer response = new StringBuffer();
-                while ((line = rd.readLine()) != null) {
-                    response.append(line);
-                    response.append('\r');
-                }
-                rd.close();
-
-                return response.toString().trim();
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            return null;
+            return postData(xml);
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -648,10 +423,6 @@ public class XMLManager {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-    }
-    
-    public Shape xmlToShape(String xml) {
-        return null;
     }
     
     public ArrayList<String> getDrawings() {
@@ -670,92 +441,31 @@ public class XMLManager {
             
             doc.appendChild(rootElement);
             
-            //TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            //Transformer transformer = transformerFactory.newTransformer();
-            
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer();
-            //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            //transformer.setOutputProperty(OutputKeys.ENCODING, "US-ASCII");
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
             String xml = writer.getBuffer().toString().replaceAll("\n|\r", "");
-            
-            //String xml = "";
-            
-            DOMSource source = new DOMSource(doc);
-            
-            //StreamResult result =  new StreamResult(xml);
-            //transformer.transform(source, result);
+                  
+            InputSource is;     
+            is = new InputSource(new StringReader(postData(xml)));
 
-            String parameters = xml;
-             
-            System.out.println(">>REQ=" + xml);
-            
-            URL url;
-            HttpURLConnection connection = null;
-            
-            try {
-                url = new URL(servername);
-                
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "text/xml");
-                
-                connection.setRequestProperty("Content-Length", Integer.toString(parameters.getBytes().length));
-                connection.setRequestProperty("Content-Language", "en-US");
+            doc = docBuilder.parse(is);
 
-                connection.setUseCaches(false);
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
+            NodeList nList = doc.getElementsByTagName("drawing");
                 
-                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                wr.writeBytes(parameters);
-                wr.flush();
-                wr.close();
-                
-                InputStream is = connection.getInputStream();
-                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-                String line;
-                StringBuffer response = new StringBuffer();
-                while ((line = rd.readLine()) != null) {
-                    response.append(line);
-                    response.append('\r');
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node nNode = nList.item(temp);
+
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+
+                    drawings.add(eElement.getAttribute("id"));
                 }
-                rd.close();
-                
-                InputSource is2;
-                is2 = new InputSource(new StringReader(response.toString().trim()));
-                
-                //System.out.println(response.toString().trim());
-                
-                doc = docBuilder.parse(is2);
-                //doc.getDocumentElement().normalize();
-                
-                NodeList nList = doc.getElementsByTagName("drawing");
-                
-                for (int temp = 0; temp < nList.getLength(); temp++) {
-                    Node nNode = nList.item(temp);
-                    
-                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element eElement = (Element) nNode;
- 
-			drawings.add(eElement.getAttribute("id"));
-                    }
-                }
-                
-                return drawings;
-                //return response.toString().trim();
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SAXException ex) {
-                Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            return null;
-        } catch (ParserConfigurationException ex) {
+                
+            return drawings;
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
             Logger.getLogger(XMLManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         } catch (TransformerConfigurationException ex) {
